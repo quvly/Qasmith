@@ -257,7 +257,7 @@ func (s *server) handle(ctx context.Context, in inbound) (bool, error) {
 		s.hierarchicalSymbols = init.Capabilities.TextDocument.DocumentSymbol.Hierarchical
 		s.diagnosticVersions = init.Capabilities.TextDocument.PublishDiagnostics.VersionSupport
 		s.configure(init.InitializationOptions)
-		respond(map[string]any{"serverInfo": map[string]string{"name": "Qasmith", "version": "0.9.0"},
+		respond(map[string]any{"serverInfo": map[string]string{"name": "Qasmith", "version": "0.9.1"},
 			"capabilities": map[string]any{
 				"positionEncoding": "utf-16", "textDocumentSync": map[string]any{"openClose": true, "change": 1, "save": map[string]bool{"includeText": true}},
 				"completionProvider": map[string]any{"triggerCharacters": []string{"{", ":", ">"}},

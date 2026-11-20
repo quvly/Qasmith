@@ -47,7 +47,7 @@ func RunContext(ctx context.Context, args []string, out, stderr io.Writer) int {
 		return runQAOA(ctx, args, out, stderr)
 	}
 	if command == "version" && len(args) == 0 {
-		fmt.Fprintln(out, "Qasmith v0.9.0")
+		fmt.Fprintln(out, "Qasmith v0.9.1")
 		return 0
 	}
 	if command == "help" || command == "--help" || command == "-h" {

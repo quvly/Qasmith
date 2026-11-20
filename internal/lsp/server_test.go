@@ -188,7 +188,7 @@ func TestProtocolEditor(t *testing.T) {
 	need(t, feature("documentSymbol", Position{}), "main", "helper")
 	c.send("textDocument/didClose", 0, map[string]any{"textDocument": textDocument{URI: uri}})
 	need(t, diagnostics(uri, 0), "\"diagnostics\":[]")
-	need(t, c.request("textDocument/definition", map[string]any{"textDocument": map[string]string{"uri": uri}})["error"], "no such file")
+	need(t, c.request("textDocument/definition", map[string]any{"textDocument": map[string]string{"uri": uri}})["error"], "open entry")
 	if got := c.request("shutdown", nil)["result"]; string(got) != "null" {
 		t.Fatalf("shutdown: %s", got)
 	}

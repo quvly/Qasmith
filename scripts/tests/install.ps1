@@ -20,7 +20,7 @@ try {
     $tag = $Matches[1]
     Copy-Item -LiteralPath $built -Destination $assetPath
     $hash = (Get-FileHash -LiteralPath $assetPath -Algorithm SHA256).Hash.ToLowerInvariant()
-    Set-Content -LiteralPath "$assetPath.sha256" -Value "$hash  $asset"
+    Set-Content -LiteralPath "$assetPath.sha256" -Value $hash
     $installer = Join-Path $root 'scripts/install.ps1'
     $binDir = Join-Path $fixture 'bin with spaces'
     $installed = Join-Path $binDir 'qasmith.exe'

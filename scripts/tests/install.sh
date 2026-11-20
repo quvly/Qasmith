@@ -18,7 +18,7 @@ asset="qasmith-$os-$arch"
 version=$("$root/qasmith" version)
 export QASMITH_TEST_TAG="${version#Qasmith }"
 cp "$root/qasmith" "$fixture/$asset"
-(cd "$fixture" && shasum -a 256 "$asset" > "$asset.sha256")
+(cd "$fixture" && shasum -a 256 "$asset" | awk '{print $1}' > "$asset.sha256")
 cat > "$fixture/curl" <<'MOCK'
 #!/bin/sh
 set -eu

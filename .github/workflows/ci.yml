@@ -33,7 +33,15 @@ jobs:
             printf '%s\n' "$unformatted"
             exit 1
           fi
-      - run: go test ./...
+      - name: Run Go tests
+        run: |
+          if go test ./... 2>&1 | tee "$RUNNER_TEMP/qasmith-go-test.log"; then
+            exit 0
+          fi
+          awk '/^--- FAIL:|^[[:blank:]]+[^[:blank:]]+\.go:[0-9]+: |^FAIL[[:blank:]]/ {
+            gsub(/%/, "%25"); gsub(/\r/, "%0D"); print "::error title=Go tests::" $0
+          }' "$RUNNER_TEMP/qasmith-go-test.log"
+          exit 1
       - run: go vet ./...
       - run: go build ./cmd/qasmith
       - name: Test POSIX installer

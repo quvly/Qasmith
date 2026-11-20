@@ -1,6 +1,6 @@
 # Qasmith
 
-Qasmith is a high-level quantum programming language for developers who want familiar functions, modules, and packages. Version 0.9.0 compiles reusable `.smith` modules to OpenQASM 3.0 and includes a local ideal statevector simulator. The CLI builds with the Go toolchain. The VS Code extension adds live diagnostics, navigation and compiler commands.
+Qasmith is a high-level quantum programming language for developers who want familiar functions, modules, and packages. Version 0.9.1 compiles reusable `.smith` modules to OpenQASM 3.0 and includes a local ideal statevector simulator. The CLI builds with the Go toolchain. The VS Code extension adds live diagnostics, navigation and compiler commands.
 
 ## Install
 
@@ -15,7 +15,7 @@ export PATH="$HOME/.local/bin:$PATH"
 qasmith version
 ```
 
-The installer defaults to `~/.local/bin`. Add the export to your shell configuration to keep it across sessions. Use `--version v0.9.0` to pin a release or `--bin-dir DIRECTORY` to choose a destination.
+The installer defaults to `~/.local/bin`. Add the export to your shell configuration to keep it across sessions. Use `--version v0.9.1` to pin a release or `--bin-dir DIRECTORY` to choose a destination.
 
 **Windows PowerShell**
 
@@ -25,7 +25,7 @@ Invoke-WebRequest https://github.com/quvly/Qasmith/releases/latest/download/inst
 qasmith version
 ```
 
-The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. Use `-Version v0.9.0`, `-BinDir DIRECTORY`, or `-NoPath` to override the defaults.
+The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. Use `-Version v0.9.1`, `-BinDir DIRECTORY`, or `-NoPath` to override the defaults.
 
 ### Build from source
 
@@ -130,4 +130,4 @@ Qasmith is licensed under [Apache-2.0](LICENSE).
 
 ## Editor tooling
 
-Install the local VSIX and follow the [Visual Studio Code guide](docs/tooling/vscode.md). Other editors can connect to the standalone [Qasmith language server](docs/tooling/lsp.md)..
+Install the local VSIX and follow the [Visual Studio Code guide](docs/tooling/vscode.md). Other editors can connect to the standalone [Qasmith language server](docs/tooling/lsp.md).

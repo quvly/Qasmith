@@ -53,7 +53,7 @@ trap 'exit 1' HUP INT TERM
 
 curl --fail --silent --show-error --location --proto '=https' --output "$stage/$asset.sha256" "$url/$asset.sha256"
 curl --fail --silent --show-error --location --proto '=https' --output "$stage/$asset" "$url/$asset"
-expected=$(awk -v name="$asset" 'NF == 2 && $2 == name { print $1 }' "$stage/$asset.sha256")
+expected=$(awk -v name="$asset" 'NF == 1 || (NF == 2 && $2 == name) { print $1 }' "$stage/$asset.sha256")
 if command -v sha256sum >/dev/null 2>&1; then
     actual=$(sha256sum "$stage/$asset" | awk '{print $1}')
 else

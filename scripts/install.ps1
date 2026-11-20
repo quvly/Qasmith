@@ -26,7 +26,7 @@ try {
     Invoke-WebRequest -UseBasicParsing -Uri "$url/$asset" -OutFile $binary
     $expected = (Get-Content -LiteralPath $checksum -Raw).Trim() -split '\s+'
     $actual = (Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash
-    if ($expected.Count -ne 2 -or $expected[1] -cne $asset -or $expected[0] -ne $actual) {
+    if ($expected.Count -gt 2 -or ($expected.Count -eq 2 -and $expected[1] -cne $asset) -or $expected[0] -ne $actual) {
         throw 'Qasmith download failed SHA-256 verification.'
     }
     & $binary version

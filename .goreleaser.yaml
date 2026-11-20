@@ -1,0 +1,27 @@
+version: 2
+project_name: qasmith
+
+builds:
+  - id: qasmith
+    main: ./cmd/qasmith
+    binary: qasmith
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+      - -buildvcs=false
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+
+archives:
+  - formats: [binary]
+    name_template: 'qasmith-{{ .Os }}-{{ .Arch }}'
+
+checksum:
+  algorithm: sha256
+  split: true
+
+release:
+  extra_files:
+    - glob: scripts/install.sh
+    - glob: scripts/install.ps1
