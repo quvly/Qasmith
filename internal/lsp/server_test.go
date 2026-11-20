@@ -155,17 +155,28 @@ func TestProtocolEditor(t *testing.T) {
 	c.send("$/cancelRequest", 0, map[string]int{"id": c.id + 1})
 	need(t, c.request("textDocument/hover", map[string]any{"textDocument": map[string]string{"uri": uri}})["error"], "-32800")
 
-	diagnostics := func(target string, version int) json.RawMessage {
+	diagnostics := func(target string, version int, message string) json.RawMessage {
 		return c.until(func(m map[string]json.RawMessage) bool {
 			if string(m["method"]) != "\"textDocument/publishDiagnostics\"" {
 				return false
 			}
 			var p struct {
-				URI     string
-				Version int
+				URI         string
+				Version     int
+				Diagnostics []diagnostic
 			}
-			json.Unmarshal(m["params"], &p)
-			return p.URI == target && p.Version == version
+			if json.Unmarshal(m["params"], &p) != nil || p.URI != target || p.Version != version {
+				return false
+			}
+			if message == "" {
+				return len(p.Diagnostics) == 0
+			}
+			for _, d := range p.Diagnostics {
+				if strings.Contains(d.Message, message) {
+					return true
+				}
+			}
+			return false
 		})["params"]
 	}
 	change := func(target string, version int, text string) {
@@ -173,21 +184,23 @@ func TestProtocolEditor(t *testing.T) {
 	}
 	helperURI := fileURI(helper)
 	c.send("textDocument/didOpen", 0, map[string]any{"textDocument": textDocument{helperURI, "pub fn renamed(n: Int) -> Int { return n; }", 1}})
-	need(t, diagnostics(uri, 1), "helper")
+	// The dependency can change without changing the entry document's version.
+	// An earlier empty publication for the same version may still be queued.
+	diagnostics(uri, 1, "helper")
 	change(helperURI, 3, "pub fn helper(n: Int) -> Int { return n; }")
 	change(helperURI, 2, "pub fn stale(n: Int) -> Int { return n; }")
-	need(t, diagnostics(helperURI, 3), "\"diagnostics\":[]")
+	diagnostics(helperURI, 3, "")
 	c.send("textDocument/didSave", 0, map[string]any{"textDocument": textDocument{URI: helperURI}})
 	c.send("textDocument/didClose", 0, map[string]any{"textDocument": textDocument{URI: helperURI}})
-	need(t, diagnostics(helperURI, 0), "\"diagnostics\":[]")
+	diagnostics(helperURI, 0, "")
 	broken := "fn main() -> Int { /* Ž🧪 */ return unknown; }\r\n"
 	change(uri, 2, broken)
-	need(t, diagnostics(uri, 2), "unknown", `"character":36`)
+	need(t, diagnostics(uri, 2, "unknown"), `"character":36`)
 	change(uri, 3, "fn helper() -> Int { return 1; }\nfn main() -> Int { let n =")
-	need(t, diagnostics(uri, 3), "E1002")
+	need(t, diagnostics(uri, 3, "expected"), "E1002")
 	need(t, feature("documentSymbol", Position{}), "main", "helper")
 	c.send("textDocument/didClose", 0, map[string]any{"textDocument": textDocument{URI: uri}})
-	need(t, diagnostics(uri, 0), "\"diagnostics\":[]")
+	diagnostics(uri, 0, "")
 	need(t, c.request("textDocument/definition", map[string]any{"textDocument": map[string]string{"uri": uri}})["error"], "open entry")
 	if got := c.request("shutdown", nil)["result"]; string(got) != "null" {
 		t.Fatalf("shutdown: %s", got)
