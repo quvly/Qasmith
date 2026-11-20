@@ -117,12 +117,6 @@ Start with [Building Your First Quantum Optimization Model in Qasmith](docs/opti
 - [Creating Your First Qasmith Package](docs/packages.md)
 - [Compiler architecture, IR, OpenQASM, and simulation](docs/architecture.md)
 - [Extending the Qasmith Compiler in Go](docs/extensions.md)
-- [Phase 3C compliance report](docs/phase-3c-compliance.md)
-- [Phase 3B compliance report](docs/phase-3b-compliance.md)
-- [Phase 3A compliance report](docs/phase-3a-compliance.md)
-- [Phase 2D compliance report](docs/phase-2d-compliance.md)
-- [Phase 2C compliance report](docs/phase-2c-compliance.md)
-- [Phase 2B compliance report](docs/phase-2b-compliance.md)
 - [Limitations and roadmap](docs/roadmap.md)
 - [Contributing](CONTRIBUTING.md)
 
