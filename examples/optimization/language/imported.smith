@@ -1,0 +1,7 @@
+import { fourCityProblem as problem } from "./library/travel.smith";
+import { qaoa as quantumSearch } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let tour = problem();
+    return quantumSearch(tour, [0.4], [0.3]);
+}

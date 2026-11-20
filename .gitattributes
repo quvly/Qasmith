@@ -1,0 +1,6 @@
+* text=auto
+*.go text eol=lf
+*.smith text eol=lf
+*.qasm text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf

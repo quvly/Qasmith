@@ -1,0 +1,10 @@
+import { prepareBell } from "entangle/bell";
+
+fn main() -> MeasuredResult {
+    let a = qubit();
+    let b = qubit();
+
+    prepareBell(a, b);
+
+    return measure(a, b);
+}

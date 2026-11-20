@@ -1,0 +1,6 @@
+import { buildProblem } from "myoptimization/models";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    return qaoa(buildProblem(-2.0, 3.0), [0.4], [0.3]);
+}

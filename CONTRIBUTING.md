@@ -1,0 +1,12 @@
+# Contributing
+
+Build and test from the repository root using Go 1.22 or later.
+
+```sh
+gofmt -w cmd internal pkg tests
+go test ./...
+go vet ./...
+go build ./cmd/qasmith
+```
+
+Include a minimal `.smith` example for changes to syntax or semantics. Keep backend changes grounded in the IR and add coverage for any change to generated instructions or measurement order. Module tests should exercise imports through real files. Describe user-facing behavior changes in the guides under `docs/`.

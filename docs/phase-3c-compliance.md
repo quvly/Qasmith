@@ -1,0 +1,25 @@
+# Phase 3C compliance report
+
+Qasmith v0.8.0 supports user-defined QUBO objectives in Smith through the trusted `std/optimization/qubo` module. Local model libraries can be compiled, sampled, and optimized through the general CLI using its existing QAOA execution plan.
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Trusted QUBO module and typed imports | PASS | All eight exports register through the existing standard registry. Numeric shapes and integer index arrays use generic signature constraints. Tests cover aliases, missing exports, conflicts, and semantic checking without model callbacks. [Registry](../internal/stdlib/registry.go), [QUBO adapters](../internal/stdlib/qubo.go), [tests](../pkg/qasmith/qubo_language_test.go) |
+| Empty, matrix, linear, and quadratic model construction | PASS | The module delegates to the existing Go builder and matrix importer. Tests compare canonical terms, reversed and diagonal pairs, offsets, and energies for the full three-variable reference and 16 seeded dense and sparse fixtures. Randomized tests also evaluate the original matrix independently. [Implementation](../internal/stdlib/qubo.go), [landscape tests](../pkg/qasmith/qubo_language_test.go) |
+| Generic penalties and model composition | PASS | Exactly-one and weighted squared penalties reuse the underlying Go functions. Tests verify both penalties and scaled composition across every assignment, including negative and fractional weights and nonzero offsets. [Penalty and composition wrappers](../internal/stdlib/qubo.go), [mathematical tests](../pkg/qasmith/qubo_language_test.go) |
+| Immutable snapshots and decoder protection | PASS | Shared model arguments remain unchanged across transformations in imported helpers. Generic edits reject decoder-bearing objects on either side. Intermediate models retain the QUBO until the final plan converts it. [Snapshot handling](../internal/stdlib/qubo.go), [plan](../pkg/optimization/plan/plan.go), [tests](../pkg/qasmith/qubo_language_test.go) |
+| Pure Smith modules and manifest packages | PASS | Parameterized model factories and separate constraint helpers work through ordinary imports. A local manifest dependency compiles to the same QASM as the equivalent direct objective. [Examples](../examples/optimization/qubo-language/README.md), [CLI tests](../tests/integration/cli_test.go) |
+| Circuit and runtime equivalence | PASS | Reference fixtures compare QUBO and Ising serialization, normalized IR, byte-identical QASM, complex amplitudes, exact expectations, and seeded outcomes. The generic CLI reports raw data and energy fields for custom models. [Go and Smith equivalence tests](../pkg/qasmith/qubo_language_test.go), [CLI tests](../tests/integration/cli_test.go) |
+| Bounded construction and source-aware errors | PASS | Model copies, matrix conversion, and potential penalty expansions charge shared budgets. Tests cover type, shape, index, finite arithmetic, penalty and resource diagnostics, including the imported call chain. [Budgets and validation](../internal/stdlib/qubo.go), [diagnostic tests](../pkg/qasmith/qubo_language_test.go) |
+| Optimization, compatibility, and independent OpenQASM validation | PASS | Existing exact and sampled optimization work with user-defined models and leave Smith source unchanged. The existing TSP source and CLI, generic QAOA CLI, host intrinsics, passes, and prior regression suite pass. The reference parser accepted the example circuits and the final optimized export. [CLI and regression tests](../tests/integration/cli_test.go), [parser tests](../tests/integration/openqasm_test.go) |
+| Documentation and next phase | PASS | The tutorial requires only Smith. References cover all signatures, constraints, metadata policy, resource limits, and proposed Phase 4A compiler APIs. [Tutorial](optimization/custom-models.md), [QUBO API](optimization/qubo-language.md), [tooling API notes](developer-tooling.md) |
+
+## Verification
+
+`gofmt -w .`, `go test ./...`, `go vet ./...`, and `go build ./cmd/qasmith` passed. The independent OpenQASM reference parser validated the tested Smith circuits and separately parsed the generated initial and optimized QASM files.
+
+The seed-42 reference search used the exact objective and stopped at its 200-evaluation budget. Expected energy went from 9.82777386846 to 5.11439465432. The final 1,000 shots observed `100` 398 times at QUBO energy −1. [Recorded run](../examples/optimization/qubo-language/expected/optimize-seed-42.txt)
+
+## Limits and compatibility
+
+The root [program.smith](../program.smith) now builds a generic constrained QUBO. The previous direct TSP program remains at [tsp.smith](../tsp.smith). Existing host callback signatures and optimizer interfaces remain usable. The new array signature option specializes numeric leaves without changing existing rank-only behavior. Generic transformations require models without attached decoders. Local statevector simulation still supports at most 16 qubits, with separate circuit-export limits.

@@ -1,0 +1,15 @@
+Qubits: 3
+Layers: 1
+Shots: 1000
+Estimated expected QUBO energy: 9.926
+Measurement counts:
+000: 37 (0.037000), QUBO energy 11
+001: 201 (0.201000), QUBO energy 0.5
+010: 221 (0.221000), QUBO energy 4
+011: 27 (0.027000), QUBO energy 12.5
+100: 150 (0.150000), QUBO energy -1
+101: 93 (0.093000), QUBO energy 8.5
+110: 158 (0.158000), QUBO energy 16
+111: 113 (0.113000), QUBO energy 44.5
+Best observed assignment: 100
+Best observed QUBO energy: -1

@@ -1,0 +1,12 @@
+import { qubo, addLinear, addQuadratic } from "std/optimization/qubo";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let base = qubo(3, 1.0);
+    let a = addLinear(base, 0, -2.0);
+    let b = addLinear(a, 1, 3.0);
+    let c = addLinear(b, 2, -0.5);
+    let d = addQuadratic(c, 0, 1, 4.0);
+    let model = addQuadratic(d, 1, 2, -1.0);
+    return qaoa(model, [0.4], [0.3]);
+}

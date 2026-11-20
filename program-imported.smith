@@ -1,0 +1,7 @@
+import { fourCityProblem } from "./libraries/travel.smith";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let problem = fourCityProblem();
+    return qaoa(problem, [0.4], [0.3]);
+}

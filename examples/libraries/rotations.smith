@@ -1,0 +1,5 @@
+import { rzz as rotate } from "../modules/rotations.smith";
+
+pub fn rzz(theta: Float, a: Qubit, b: Qubit) -> Void {
+    rotate(theta, a, b);
+}

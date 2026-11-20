@@ -1,0 +1,8 @@
+fn internalPreparation(q: Qubit) -> Void {
+    h(q);
+}
+
+pub fn prepareBell(a: Qubit, b: Qubit) -> Void {
+    internalPreparation(a);
+    cx(a, b);
+}

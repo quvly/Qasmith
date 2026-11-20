@@ -1,0 +1,7 @@
+import { tsp } from "std/optimization/tsp";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let problem = tsp([[0, 2, 3], [2, 0, -1], [3, 1, 0]], 0);
+    return qaoa(problem, [0.4], [0.3]);
+}

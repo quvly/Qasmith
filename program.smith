@@ -1,0 +1,15 @@
+import { fromMatrix, addExactlyOne } from "std/optimization/qubo";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let matrix = [
+        [-2.0, 4.0, 0.0],
+        [0.0, 3.0, -1.0],
+        [0.0, 0.0, -0.5]
+    ];
+
+    let model = fromMatrix(matrix, 1.0);
+    let constrained = addExactlyOne(model, [0, 1, 2], 10.0);
+
+    return qaoa(constrained, [0.4], [0.3]);
+}

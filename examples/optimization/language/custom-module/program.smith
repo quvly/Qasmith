@@ -1,0 +1,6 @@
+import { objective } from "./factory.smith";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    return qaoa(objective(1.0), [1.5707963267948966], [-0.7853981633974483]);
+}

@@ -1,0 +1,7 @@
+import { fromMatrix } from "std/optimization/qubo";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let model = fromMatrix([[-2.0, 4.0, 0.0], [0.0, 3.0, -1.0], [0.0, 0.0, -0.5]], 1.0);
+    return qaoa(model, [0.4], [0.3]);
+}

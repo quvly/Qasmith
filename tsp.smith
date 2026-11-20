@@ -1,0 +1,15 @@
+import { tsp } from "std/optimization/tsp";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let distances = [
+        [0, 10, 15, 20],
+        [10, 0, 35, 25],
+        [15, 35, 0, 30],
+        [20, 25, 30, 0]
+    ];
+
+    let problem = tsp(distances, 0);
+
+    return qaoa(problem, [0.4], [0.3]);
+}

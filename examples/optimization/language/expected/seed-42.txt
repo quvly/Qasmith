@@ -1,0 +1,15 @@
+Qubits: 9
+Layers: 1
+Shots: 1000
+Estimated expected QUBO energy: 1775.325
+Best observed assignment: 010001100
+Best observed QUBO energy: 80
+Feasible samples: 34
+Infeasible samples: 966
+Feasibility rate: 0.034000
+Best feasible route: [0 1 3 2 0]
+Best feasible distance: 80
+Classical optimal route: [0 1 3 2 0]
+Classical optimal distance: 80
+Optimal tour samples: 15
+Optimal tour sample rate: 0.015000

@@ -1,0 +1,5 @@
+import { add as sum } from "./modules/math.smith";
+
+fn main() -> Int {
+    return sum(3, 5);
+}

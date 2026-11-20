@@ -1,0 +1,12 @@
+import { prepare } from "./quantum/preparation.smith";
+import { applyLayer } from "./quantum/layers.smith";
+
+fn main() -> MeasuredResult {
+    let q = qreg(4);
+    let angles = [0.1, 0.2, 0.3, 0.4];
+
+    prepare(q);
+    applyLayer(q, angles);
+
+    return measure(q);
+}

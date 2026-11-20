@@ -1,0 +1,9 @@
+pub fn rzz(theta: Float, a: Qubit, b: Qubit) -> Void {
+    cx(a, b);
+    rz(theta, b);
+    cx(a, b);
+}
+
+pub fn rotatePair(theta: Float, a: Qubit, b: Qubit) -> Void {
+    rzz(theta, a, b);
+}

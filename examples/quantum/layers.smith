@@ -1,0 +1,5 @@
+pub fn applyLayer(q: QReg<4>, angles: Float[4]) -> Void {
+    for i in 0..4 {
+        rz(angles[i], q[i]);
+    }
+}

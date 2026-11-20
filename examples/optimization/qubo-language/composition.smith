@@ -1,0 +1,10 @@
+import { weightedPair } from "./libraries/custom_problem.smith";
+import { fromMatrix, scale, combine } from "std/optimization/qubo";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let first = weightedPair(-2.0, 3.0);
+    let second = fromMatrix([[0.0, 2.0], [0.0, 1.0]], 1.25);
+    let model = combine(first, scale(second, 0.5));
+    return qaoa(model, [0.4], [0.3]);
+}

@@ -1,0 +1,7 @@
+{
+  "name": "qubo-language-example",
+  "version": "0.1.0",
+  "dependencies": {
+    "myoptimization": {"path": "./packages/myoptimization"}
+  }
+}

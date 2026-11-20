@@ -1,0 +1,9 @@
+import { addExactlyOne, addSquaredLinear } from "std/optimization/qubo";
+
+pub fn oneChoice(model: OptimizationProblem) -> OptimizationProblem {
+    return addExactlyOne(model, [0, 1, 2], 10.0);
+}
+
+pub fn weightedConstraint(model: OptimizationProblem) -> OptimizationProblem {
+    return addSquaredLinear(model, [0, 1, 2], [1.5, -2.0, 0.5], 1.5, 2.0);
+}

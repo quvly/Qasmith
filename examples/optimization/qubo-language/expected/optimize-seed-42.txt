@@ -1,0 +1,24 @@
+Objective mode: exact
+Initial expected energy: 9.82777386846
+Best expected energy: 5.11439465432
+Gammas: [-2.031787609725159]
+Betas: [-1.0296387712204966]
+Evaluations: 200
+Iterations: 49
+Converged: false
+Termination: evaluation limit
+Qubits: 3
+Layers: 1
+Shots: 1000
+Estimated expected QUBO energy: 5.3975
+Measurement counts:
+000: 48 (0.048000), QUBO energy 11
+001: 285 (0.285000), QUBO energy 0.5
+010: 42 (0.042000), QUBO energy 4
+011: 89 (0.089000), QUBO energy 12.5
+100: 398 (0.398000), QUBO energy -1
+101: 44 (0.044000), QUBO energy 8.5
+110: 25 (0.025000), QUBO energy 16
+111: 69 (0.069000), QUBO energy 44.5
+Best observed assignment: 100
+Best observed QUBO energy: -1

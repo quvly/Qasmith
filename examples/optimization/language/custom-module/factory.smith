@@ -1,0 +1,5 @@
+import { createProblem } from "host:custom-optimization";
+
+pub fn objective(cost: Float) -> OptimizationProblem {
+    return createProblem(cost);
+}

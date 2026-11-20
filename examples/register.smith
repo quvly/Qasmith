@@ -1,0 +1,9 @@
+fn main() -> MeasuredResult {
+    let q = qreg(4);
+
+    for i in 0..4 {
+        h(q[i]);
+    }
+
+    return measure(q);
+}

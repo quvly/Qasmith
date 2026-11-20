@@ -1,0 +1,12 @@
+import { rzz } from "./modules/rotations.smith";
+
+fn main() -> MeasuredResult {
+    let a = qubit();
+    let b = qubit();
+
+    rx(pi, a);
+    ry(pi, b);
+    rzz(pi / 2.0, a, b);
+
+    return measure(a, b);
+}

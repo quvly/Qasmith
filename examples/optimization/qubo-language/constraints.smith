@@ -1,0 +1,8 @@
+import { createProblem } from "./libraries/custom_problem.smith";
+import { oneChoice, weightedConstraint } from "./libraries/constraints.smith";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    let model = weightedConstraint(oneChoice(createProblem()));
+    return qaoa(model, [0.4], [0.3]);
+}

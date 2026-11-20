@@ -1,0 +1,7 @@
+import { createProblem as build } from "./libraries/custom_problem.smith";
+import { oneChoice } from "./libraries/constraints.smith";
+import { qaoa } from "std/optimization/qaoa";
+
+fn main() -> MeasuredResult {
+    return qaoa(oneChoice(build()), [0.4], [0.3]);
+}

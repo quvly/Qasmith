@@ -1,0 +1,7 @@
+{
+  "name": "qasmith-example",
+  "version": "0.1.0",
+  "dependencies": {
+    "entangle": { "path": "./packages/entangle" }
+  }
+}

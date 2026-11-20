@@ -1,0 +1,5 @@
+pub fn prepare(q: QReg<4>) -> Void {
+    for i in 0..4 {
+        h(q[i]);
+    }
+}

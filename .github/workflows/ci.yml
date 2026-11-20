@@ -1,0 +1,62 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Check Go formatting
+        run: |
+          unformatted=$(git ls-files -z '*.go' | xargs -0 gofmt -l)
+          if [[ -n "$unformatted" ]]; then
+            printf '%s\n' "$unformatted"
+            exit 1
+          fi
+      - run: go test ./...
+      - run: go vet ./...
+      - run: go build ./cmd/qasmith
+      - name: Test POSIX installer
+        if: runner.os != 'Windows'
+        run: sh scripts/tests/install.sh
+      - name: Test Windows installer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/tests/install.ps1
+
+  vscode:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: editors/vscode
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: editors/vscode/package-lock.json
+      - run: npm ci
+      - run: npm run compile
+      - run: npm run lint
+      - run: npm test

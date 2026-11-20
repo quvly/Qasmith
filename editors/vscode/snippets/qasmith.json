@@ -1,0 +1,46 @@
+{
+  "Function": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:name}() -> ${2:Void} {",
+      "    $0",
+      "}"
+    ]
+  },
+  "Quantum main": {
+    "prefix": "main",
+    "body": [
+      "fn main() -> MeasuredResult {",
+      "    let ${1:q} = qubit();",
+      "    return measure(${1:q});",
+      "}"
+    ]
+  },
+  "Quantum register": {
+    "prefix": "qreg",
+    "body": [
+      "let ${1:q} = qreg(${2:4});"
+    ]
+  },
+  "Compile-time loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:i} in 0..${2:4} {",
+      "    h(${3:q}[${1:i}]);",
+      "}"
+    ]
+  },
+  "Import function": {
+    "prefix": "import",
+    "body": [
+      "import { ${1:functionName} } from \"./${2:module}.smith\";"
+    ]
+  },
+  "QAOA circuit": {
+    "prefix": "qaoa",
+    "body": [
+      "import { qaoa } from \"std/optimization/qaoa\";",
+      "return qaoa(${1:problem}, [${2:0.4}], [${3:0.3}]);"
+    ]
+  }
+}
