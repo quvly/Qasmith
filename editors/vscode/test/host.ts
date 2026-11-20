@@ -41,7 +41,7 @@ export async function run(): Promise<void> {
     const doc = await vscode.workspace.openTextDocument(file);
     assert.equal(doc.languageId, 'qasmith');
     const editor = await vscode.window.showTextDocument(doc);
-    const extension = vscode.extensions.getExtension('qasmith-local.qasmith-vscode');
+    const extension = vscode.extensions.getExtension('Quvly.qasmith-language');
     assert.ok(extension);
     await extension.activate();
     assert.equal(await vscode.commands.executeCommand('qasmith.check'), false);

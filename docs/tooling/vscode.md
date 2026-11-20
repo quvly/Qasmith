@@ -3,7 +3,7 @@
 Install VS Code 1.90 or newer and Qasmith CLI 0.9.0. From the Qasmith checkout, build the CLI with `go build ./cmd/qasmith` and install the extension with:
 
 ```sh
-code --install-extension editors/vscode/qasmith-vscode-0.9.0.vsix
+code --install-extension editors/vscode/qasmith-language-0.9.0.vsix
 ```
 
 Use **Extensions → Install from VSIX…** if the `code` command is unavailable. Put Qasmith on PATH or set its absolute path in User Settings. Open a project directory and grant Workspace Trust to enable compiler processes. Highlighting, bracket matching, comment toggling, indentation, folding and snippets are available in Restricted Mode.

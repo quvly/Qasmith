@@ -2,6 +2,16 @@
 
 Qasmith is a high-level quantum programming language for developers who want familiar functions, modules, and packages. Version 0.9.1 compiles reusable `.smith` modules to OpenQASM 3.0 and includes a local ideal statevector simulator. The CLI builds with the Go toolchain. The VS Code extension adds live diagnostics, navigation and compiler commands.
 
+## Built by Quvly
+
+**Quvly created Qasmith and is building an enterprise execution engine for quantum experiments.** Bring a research question or a complex optimization problem. Quvly brings AI-assisted modeling, quantum execution, classical benchmarks, and result verification into one research workspace. The goal is to make each experiment reproducible and give teams the evidence they need to evaluate its results. [Explore Quvly](https://quvly.eu)
+
+- **Model the problem.** Turn a research objective described in plain language into a structured experimental approach.
+- **Run and compare.** Explore quantum algorithms and compare their results with classical baselines.
+- **Verify and reproduce.** Keep track of experiment settings, execution details, and research artifacts so your team can review and rerun the work.
+
+**Quvly is in private research alpha, and early access is open.** Qasmith is open source and available today. [Request early access at Quvly](https://quvly.eu/#early-access)
+
 ## Install
 
 Download the installer for your platform from the [latest GitHub release](https://github.com/quvly/Qasmith/releases/latest). Both installers verify the executable's SHA-256 checksum. Releases support x86-64 and ARM64 on all three platforms.

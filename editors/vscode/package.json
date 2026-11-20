@@ -1,9 +1,10 @@
 {
-  "name": "qasmith-vscode",
-  "displayName": "Qasmith",
+  "name": "qasmith-language",
+  "displayName": "Qasmith Smith Tools by Quvly",
   "description": "Smith language support and local quantum compiler integration",
   "version": "0.9.0",
-  "publisher": "qasmith-local",
+  "publisher": "Quvly",
+  "icon": "icon.png",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
