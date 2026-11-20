@@ -130,4 +130,4 @@ Qasmith is licensed under [Apache-2.0](LICENSE).
 
 ## Editor tooling
 
-Install the local VSIX and follow the [Visual Studio Code guide](docs/tooling/vscode.md). Other editors can connect to the standalone [Qasmith language server](docs/tooling/lsp.md). See the [Phase 4A compliance report](docs/phase-4a-compliance.md) for verification.
+Install the local VSIX and follow the [Visual Studio Code guide](docs/tooling/vscode.md). Other editors can connect to the standalone [Qasmith language server](docs/tooling/lsp.md)..

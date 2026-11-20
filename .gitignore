@@ -27,3 +27,6 @@ prompts.md
 .windsurf/
 .github/instructions/
 .github/prompts/
+
+# Local phase reports
+/docs/phase-*-compliance.md
