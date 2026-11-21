@@ -63,12 +63,14 @@ nav:
   - Home: index.md
   - Getting Started:
     - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
     - First Program: getting-started/first-program.md
     - CLI Overview: getting-started/cli-overview.md
   - Language Reference:
     - Syntax: language.md
     - Circuit Construction: circuit-construction.md
     - Modules: modules.md
+    - Core Library: core-library.md
     - Packages: packages.md
   - Optimization:
     - Overview: optimization/index.md

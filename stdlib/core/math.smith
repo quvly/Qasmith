@@ -1,0 +1,74 @@
+// Core math library
+// Mathematical utilities for quantum computing
+
+// Constants
+pub fn pi() -> Float {
+    return 3.141592653589793;
+}
+
+pub fn e() -> Float {
+    return 2.718281828459045;
+}
+
+// Absolute value
+pub fn abs(x: Int) -> Int {
+    if x < 0 {
+        return -x;
+    }
+    return x;
+}
+
+// Maximum of two integers
+pub fn max(a: Int, b: Int) -> Int {
+    if a > b {
+        return a;
+    }
+    return b;
+}
+
+// Minimum of two integers
+pub fn min(a: Int, b: Int) -> Int {
+    if a < b {
+        return a;
+    }
+    return b;
+}
+
+// Power function (integer exponent)
+pub fn pow(base: Int, exp: Int) -> Int {
+    if exp == 0 {
+        return 1;
+    }
+    let result = 1;
+    for i in 0..exp {
+        result = result * base;
+    }
+    return result;
+}
+
+// Factorial (iterative to avoid recursion limit)
+pub fn factorial(n: Int) -> Int {
+    if n <= 1 {
+        return 1;
+    }
+    let result = 1;
+    for i in 2..(n + 1) {
+        result = result * i;
+    }
+    return result;
+}
+
+// Modulo operation
+pub fn modulo(a: Int, b: Int) -> Int {
+    return a - (a / b) * b;
+}
+
+// Check if number is even
+pub fn is_even(n: Int) -> Bool {
+    return modulo(n, 2) == 0;
+}
+
+// Check if number is odd
+pub fn is_odd(n: Int) -> Bool {
+    return modulo(n, 2) != 0;
+}

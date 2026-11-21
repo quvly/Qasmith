@@ -1,0 +1,13 @@
+pub fn bell(a: Qubit, b: Qubit) -> Void {
+    h(a);
+    cx(a, b);
+}
+
+pub fn ghz(a: Qubit, b: Qubit, c: Qubit) -> Void {
+    bell(a, b);
+    cx(b, c);
+}
+
+pub fn qft_single(q: Qubit) -> Void {
+    h(q);
+}

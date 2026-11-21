@@ -1,0 +1,16 @@
+// Quantum rotation gates
+//
+// Reusable rotation gate implementations.
+
+pub fn rzz(theta: Float, a: Qubit, b: Qubit) -> Void {
+    cx(a, b);
+    rz(theta, b);
+    cx(a, b);
+}
+
+pub fn rx_approx(theta: Float, q: Qubit) -> Void {
+    // Approximate RX rotation using RZ and Hadamard
+    h(q);
+    rz(theta, q);
+    h(q);
+}

@@ -1,0 +1,5 @@
+name = "quantum-library"
+version = "0.1.0"
+description = "Example project demonstrating Qasmith core library and package management"
+
+[dependencies]

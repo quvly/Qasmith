@@ -11,6 +11,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/BurntSushi/toml"
 	"github.com/quvly/Qasmith/internal/diagnostic"
 )
 
@@ -28,21 +29,28 @@ var version = regexp.MustCompile(`^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-
 
 func project(start string) (string, map[string]string, error) {
 	for dir := start; ; dir = filepath.Dir(dir) {
-		path := filepath.Join(dir, "qasmith.json")
-		info, err := os.Lstat(path)
-		if os.IsNotExist(err) {
-			if filepath.Dir(dir) == dir {
-				return start, nil, nil
+		// Try qasmith.toml first (preferred), then qasmith.json
+		var path string
+		var err error
+		var deps map[string]string
+		
+		tomlPath := filepath.Join(dir, "qasmith.toml")
+		if info, tomlErr := os.Lstat(tomlPath); tomlErr == nil && info.Mode().IsRegular() {
+			path = tomlPath
+			deps, err = readManifest(dir, path)
+		} else {
+			jsonPath := filepath.Join(dir, "qasmith.json")
+			if info, jsonErr := os.Lstat(jsonPath); jsonErr == nil && info.Mode().IsRegular() {
+				path = jsonPath
+				deps, err = readManifest(dir, path)
+			} else {
+				// No manifest found in this directory
+				if filepath.Dir(dir) == dir {
+					return start, nil, nil
+				}
+				continue
 			}
-			continue
 		}
-		if err != nil {
-			return "", nil, diagnostic.At(filePos(path), "E2100", "%v", err)
-		}
-		if !info.Mode().IsRegular() {
-			return "", nil, diagnostic.At(filePos(path), "E2100", "manifest must be a regular file")
-		}
-		deps, err := readManifest(dir, path)
 		return dir, deps, err
 	}
 }
@@ -55,18 +63,31 @@ func readManifest(dir, path string) (map[string]string, error) {
 	if err != nil {
 		return fail("%v", err)
 	}
-	if err := uniqueKeys(json.NewDecoder(bytes.NewReader(data))); err != nil {
-		return fail("%v", err)
-	}
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
+	
 	var m manifest
-	if err := decoder.Decode(&m); err != nil {
-		return fail("%v", err)
+	ext := strings.ToLower(filepath.Ext(path))
+	
+	switch ext {
+	case ".toml":
+		if _, err := toml.Decode(string(data), &m); err != nil {
+			return fail("%v", err)
+		}
+	case ".json":
+		if err := uniqueKeys(json.NewDecoder(bytes.NewReader(data))); err != nil {
+			return fail("%v", err)
+		}
+		decoder := json.NewDecoder(bytes.NewReader(data))
+		decoder.DisallowUnknownFields()
+		if err := decoder.Decode(&m); err != nil {
+			return fail("%v", err)
+		}
+		if _, err := decoder.Token(); err != io.EOF {
+			return fail("unexpected data after manifest")
+		}
+	default:
+		return fail("unsupported manifest format %q (expected .toml or .json)", ext)
 	}
-	if _, err := decoder.Token(); err != io.EOF {
-		return fail("unexpected data after manifest")
-	}
+	
 	if !packageName.MatchString(m.Name) || !version.MatchString(m.Version) {
 		return fail("invalid project name or version")
 	}

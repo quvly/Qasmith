@@ -1,0 +1,22 @@
+pub fn rxx(theta: Float, a: Qubit, b: Qubit) -> Void {
+    h(a);
+    h(b);
+    cx(a, b);
+    rz(theta, b);
+    cx(a, b);
+    h(a);
+    h(b);
+}
+
+pub fn rzz(theta: Float, a: Qubit, b: Qubit) -> Void {
+    cx(a, b);
+    rz(theta, b);
+    cx(a, b);
+}
+
+pub fn crz(theta: Float, control: Qubit, target: Qubit) -> Void {
+    rz(theta / 2, target);
+    cx(control, target);
+    rz(-theta / 2, target);
+    cx(control, target);
+}

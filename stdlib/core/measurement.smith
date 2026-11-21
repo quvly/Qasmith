@@ -1,0 +1,32 @@
+// Core measurement utilities
+// Advanced measurement patterns and techniques
+
+// Measure in X basis
+pub fn measure_x(q: Qubit) -> MeasuredResult {
+    h(q);
+    return measure(q);
+}
+
+// Measure in Y basis
+pub fn measure_y(q: Qubit) -> MeasuredResult {
+    rx(1.5707963267948966, q);
+    return measure(q);
+}
+
+// Measure in Z basis (default)
+pub fn measure_z(q: Qubit) -> MeasuredResult {
+    return measure(q);
+}
+
+// Measure multiple qubits individually
+pub fn measure_separate(a: Qubit, b: Qubit) -> MeasuredResult {
+    return measure(a, b);
+}
+
+// Conditional measurement based on classical value
+pub fn measure_if(condition: Bool, q: Qubit) -> MeasuredResult {
+    if condition {
+        h(q);
+    }
+    return measure(q);
+}

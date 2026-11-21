@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/quvly/Qasmith/internal/corelib"
 	"github.com/quvly/Qasmith/internal/diagnostic"
 	"github.com/quvly/Qasmith/internal/syntax"
 )
@@ -168,7 +169,15 @@ func (l *loader) load(path, root string, at syntax.Pos) (*syntax.Module, error) 
 	}
 	var source string
 	var overlay bool
-	if l.editor != nil {
+	if corelib.IsCorePath(path) {
+		name := strings.TrimSuffix(strings.TrimPrefix(path, corelib.VirtualRoot), ".smith")
+		src, err := corelib.Read(name)
+		if err != nil {
+			return nil, diagnostic.At(at, "E2000", "load core module %q: %v", name, err)
+		}
+		source = src
+		overlay = true
+	} else if l.editor != nil {
 		if err := l.editor.Context.Err(); err != nil {
 			return nil, err
 		}
@@ -191,11 +200,11 @@ func (l *loader) load(path, root string, at syntax.Pos) (*syntax.Module, error) 
 		}
 		source = string(data)
 	}
-	if l.editor != nil && len(source) > 1<<20 {
+	if l.editor != nil && !corelib.IsCorePath(path) && len(source) > 1<<20 {
 		return nil, diagnostic.At(at, "E2000", "editor source exceeds 1 MiB")
 	}
 	parse := syntax.Parse
-	if l.editor != nil {
+	if l.editor != nil && !corelib.IsCorePath(path) {
 		parse = l.editor.Parse
 		l.graph.Sources[path] = source
 	}
@@ -264,6 +273,35 @@ func (l *loader) resolve(importer, root, spec string) (string, string, error) {
 	if strings.ContainsAny(spec, "\\\x00") || filepath.IsAbs(spec) {
 		return "", "", fmt.Errorf("invalid module path")
 	}
+
+	// Core library: import { ... } from "core/module"
+	if strings.HasPrefix(spec, "core/") || spec == "core" {
+		name := corelib.ModuleName(spec)
+		if name == "" {
+			return "", "", fmt.Errorf("invalid core module path %q (expected core/<module>)", spec)
+		}
+		if !corelib.Exists(name) {
+			return "", "", fmt.Errorf("core module %q not found; available: %s", spec, strings.Join(corelib.ListModules(), ", "))
+		}
+		return corelib.VirtualPath(name), corelib.VirtualRoot, nil
+	}
+
+	// Relative imports from within a core module resolve inside the core root
+	if corelib.IsCorePath(importer) && (strings.HasPrefix(spec, "./") || strings.HasPrefix(spec, "../")) {
+		candidate := filepath.Join(filepath.Dir(importer), filepath.FromSlash(spec))
+		if filepath.Ext(candidate) == "" {
+			candidate += ".smith"
+		}
+		if !corelib.IsCorePath(candidate) {
+			return "", "", fmt.Errorf("path escapes core root")
+		}
+		name := strings.TrimSuffix(strings.TrimPrefix(candidate, corelib.VirtualRoot), ".smith")
+		if !corelib.Exists(name) {
+			return "", "", fmt.Errorf("core module %q not found", candidate)
+		}
+		return candidate, corelib.VirtualRoot, nil
+	}
+
 	var candidate string
 	if strings.HasPrefix(spec, "./") || strings.HasPrefix(spec, "../") {
 		candidate = filepath.Join(filepath.Dir(importer), filepath.FromSlash(spec))

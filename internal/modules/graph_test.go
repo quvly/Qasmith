@@ -126,3 +126,165 @@ func TestExternalDependency(t *testing.T) {
 		t.Fatalf("resolve external dependency: %v", err)
 	}
 }
+
+func TestTOMLManifest(t *testing.T) {
+	external := t.TempDir()
+	put(t, external, "bell.smith", "pub fn f() -> Int { return 1; }")
+	
+	for _, tc := range []struct {
+		name     string
+		manifest string
+		wantErr  string
+	}{
+		{
+			"basic toml",
+			`name = "app"
+version = "0.1.0"
+`,
+			"",
+		},
+		{
+			"toml with dependencies",
+			`name = "app"
+version = "0.1.0"
+
+[dependencies.external]
+path = "` + filepath.ToSlash(external) + `"
+`,
+			"",
+		},
+		{
+			"toml invalid version",
+			`name = "app"
+version = "invalid"
+`,
+			"invalid project name or version",
+		},
+		{
+			"toml missing name",
+			`version = "0.1.0"
+`,
+			"invalid project name or version",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			put(t, root, "qasmith.toml", tc.manifest)
+			_, err := Load(put(t, root, "main.smith", ``))
+			if tc.wantErr == "" {
+				if err != nil {
+					t.Fatalf("unexpected error: %v", err)
+				}
+			} else {
+				if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+					t.Fatalf("wanted %q, got %v", tc.wantErr, err)
+				}
+			}
+		})
+	}
+}
+
+func TestTOMLPreferredOverJSON(t *testing.T) {
+	root := t.TempDir()
+	// Resolve symlinks to get canonical path
+	canonicalRoot, err := filepath.EvalSymlinks(root)
+	if err != nil {
+		t.Fatalf("failed to resolve symlinks: %v", err)
+	}
+	
+	// Create both manifests
+	put(t, root, "qasmith.toml", `name = "toml-app"
+version = "0.1.0"
+`)
+	put(t, root, "qasmith.json", `{"name":"json-app","version":"0.1.0"}`)
+	
+	// Should use TOML
+	g, err := Load(put(t, root, "main.smith", ``))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if g.Root != canonicalRoot {
+		t.Fatalf("expected root %q, got %q", canonicalRoot, g.Root)
+	}
+}
+
+func TestCoreLibraryImport(t *testing.T) {
+	root := t.TempDir()
+	put(t, root, "qasmith.json", `{"name":"app","version":"0.1.0"}`)
+	
+	// Test importing core library module
+	main := put(t, root, "main.smith", `import { rzz } from "core/rotations";
+
+fn main() -> MeasuredResult {
+    let q = qreg(2);
+    rzz(0.5, q[0], q[1]);
+    return measure(q);
+}`)
+	
+	g, err := Load(main)
+	if err != nil {
+		t.Fatalf("failed to load module with core import: %v", err)
+	}
+	
+	// Should have 2 modules: main and core/rotations
+	if len(g.Modules) != 2 {
+		t.Fatalf("expected 2 modules, got %d", len(g.Modules))
+	}
+	
+	// Find the core module
+	foundCore := false
+	for _, m := range g.Modules {
+		if strings.HasPrefix(m.Path, "<core>/") {
+			foundCore = true
+			break
+		}
+	}
+	if !foundCore {
+		t.Error("expected to find a core library module in the graph")
+	}
+}
+
+func TestCoreLibraryMultipleImports(t *testing.T) {
+	root := t.TempDir()
+	put(t, root, "qasmith.json", `{"name":"app","version":"0.1.0"}`)
+	
+	main := put(t, root, "main.smith", `import { rzz } from "core/rotations";
+import { bell } from "core/gates";
+
+fn main() -> MeasuredResult {
+    let q = qreg(2);
+    bell(q[0], q[1]);
+    rzz(0.5, q[0], q[1]);
+    return measure(q);
+}`)
+	
+	g, err := Load(main)
+	if err != nil {
+		t.Fatalf("failed to load module with multiple core imports: %v", err)
+	}
+	
+	// Should have 3 modules: main, core/rotations, core/gates
+	if len(g.Modules) != 3 {
+		t.Fatalf("expected 3 modules, got %d", len(g.Modules))
+	}
+}
+
+func TestCoreLibraryNotFound(t *testing.T) {
+	root := t.TempDir()
+	put(t, root, "qasmith.json", `{"name":"app","version":"0.1.0"}`)
+	
+	main := put(t, root, "main.smith", `import { foo } from "core/nonexistent";
+
+fn main() -> MeasuredResult {
+    let q = qreg(1);
+    return measure(q);
+}`)
+	
+	_, err := Load(main)
+	if err == nil {
+		t.Fatal("expected error for nonexistent core module")
+	}
+	if !strings.Contains(err.Error(), "not found") {
+		t.Errorf("expected 'not found' error, got: %v", err)
+	}
+}

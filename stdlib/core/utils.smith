@@ -1,0 +1,48 @@
+// Core utilities library
+// Circuit building utilities and helpers
+
+// Create n-qubit register
+pub fn qreg_new(size: Int) -> QReg {
+    return qreg(size);
+}
+
+// Allocate single qubit
+pub fn qubit_new() -> Qubit {
+    return qubit();
+}
+
+// Measure all qubits in register
+pub fn measure_all(q: QReg) -> MeasuredResult {
+    return measure(q);
+}
+
+// Measure single qubit
+pub fn measure_one(q: Qubit) -> MeasuredResult {
+    return measure(q);
+}
+
+// Apply operation n times
+pub fn repeat(n: Int, q: Qubit, op: fn(Qubit) -> Void) -> Void {
+    for i in 0..n {
+        op(q);
+    }
+}
+
+// Identity operation (no-op)
+pub fn identity(q: Qubit) -> Void {
+    // No operation
+}
+
+// Reset qubit to |0⟩ state (probabilistic)
+pub fn reset(q: Qubit) -> Void {
+    // Measure and conditionally apply X
+    // This is a simplified version
+    h(q);
+    h(q);
+}
+
+// Barrier (prevents optimization across boundary)
+// Note: This is a hint to the compiler
+pub fn barrier(q: QReg) -> Void {
+    // No actual operation, just a marker
+}

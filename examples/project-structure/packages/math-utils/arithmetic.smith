@@ -1,0 +1,15 @@
+// Arithmetic operations
+//
+// Basic arithmetic functions for classical computation.
+
+pub fn add(a: Int, b: Int) -> Int {
+    return a + b;
+}
+
+pub fn multiply(a: Int, b: Int) -> Int {
+    return a * b;
+}
+
+pub fn subtract(a: Int, b: Int) -> Int {
+    return a - b;
+}

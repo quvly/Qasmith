@@ -1,0 +1,24 @@
+import { rzz, rxx, crz } from "core/rotations";
+import { bell, ghz } from "core/gates";
+
+fn main() -> MeasuredResult {
+    // Example 1: Bell state with RZZ rotation
+    let q1 = qreg(2);
+    bell(q1[0], q1[1]);
+    rzz(0.7853981633974483, q1[0], q1[1]);  // π/4 rotation
+    
+    // Example 2: GHZ state
+    let q2 = qreg(3);
+    ghz(q2[0], q2[1], q2[2]);
+    
+    // Example 3: RXX rotation
+    let q3 = qreg(2);
+    rxx(1.5707963267948966, q3[0], q3[1]);  // π/2 rotation
+    
+    // Example 4: Controlled RZ
+    let q4 = qreg(2);
+    h(q4[0]);
+    crz(0.5, q4[0], q4[1]);
+    
+    return measure(q1);
+}

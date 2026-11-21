@@ -1,0 +1,15 @@
+// Bell state preparation
+//
+// Creates a maximally entangled Bell state between two qubits.
+
+pub fn bell_state(a: Qubit, b: Qubit) -> Void {
+    h(a);
+    cx(a, b);
+}
+
+// GHZ state preparation for 3 qubits
+pub fn ghz_state(a: Qubit, b: Qubit, c: Qubit) -> Void {
+    h(a);
+    cx(a, b);
+    cx(b, c);
+}
