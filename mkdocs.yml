@@ -1,0 +1,123 @@
+site_name: Qasmith Documentation
+site_url: https://quvly.github.io/Qasmith
+site_description: Documentation for Qasmith, a high-level quantum programming language
+site_author: Quvly
+
+repo_name: quvly/Qasmith
+repo_url: https://github.com/quvly/Qasmith
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+exclude_docs: |
+  phase-*-compliance.md
+  developer-tooling.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - First Program: getting-started/first-program.md
+    - CLI Overview: getting-started/cli-overview.md
+  - Language Reference:
+    - Syntax: language.md
+    - Circuit Construction: circuit-construction.md
+    - Modules: modules.md
+    - Packages: packages.md
+  - Optimization:
+    - Overview: optimization/index.md
+    - QUBO:
+      - Overview: optimization/qubo.md
+      - Language Integration: optimization/qubo-language.md
+      - Constraints: optimization/constraints-language.md
+      - Model Composition: optimization/model-composition.md
+      - Optimization Packages: optimization/optimization-packages.md
+    - Ising:
+      - Overview: optimization/ising.md
+      - Conversion: optimization/conversion.md
+    - QAOA:
+      - Overview: optimization/qaoa.md
+      - Circuits: optimization/qaoa-circuits.md
+      - Evaluation: optimization/qaoa-evaluation.md
+      - Optimization: optimization/qaoa-optimization.md
+      - Extension API: optimization/qaoa-extension-api.md
+    - TSP:
+      - Overview: optimization/tsp.md
+      - Language Integration: optimization/tsp-language.md
+    - Advanced:
+      - Custom Models: optimization/custom-models.md
+      - Penalties: optimization/penalties.md
+      - Result Decoding: optimization/result-decoding.md
+      - Serialization: optimization/serialization.md
+      - Standard Library: optimization/standard-library.md
+      - Host Extensions: optimization/host-optimization-extensions.md
+      - Language Integration: optimization/language-integration.md
+      - Model Immutability: optimization/model-immutability.md
+      - Architecture: optimization/architecture.md
+      - Plans: optimization/optimization-plans.md
+  - Architecture:
+    - Compiler Architecture: architecture.md
+    - Extensions: extensions.md
+    - Roadmap: roadmap.md
+  - Developer Tools:
+    - VS Code: tooling/vscode.md
+    - Language Server: tooling/lsp.md
+    - Development: tooling/development.md
+    - Language Server API: tooling/language-server-api.md
+    - Troubleshooting: tooling/troubleshooting.md
+  - Contributing: contributing.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/quvly/Qasmith
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/quvly
+
+copyright: Copyright &copy; 2024 Quvly
