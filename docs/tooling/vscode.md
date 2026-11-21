@@ -1,12 +1,8 @@
 # Developing Qasmith Programs in Visual Studio Code
 
-Install VS Code 1.90 or newer and Qasmith CLI 0.9.0. From the Qasmith checkout, build the CLI with `go build ./cmd/qasmith` and install the extension with:
+Install VS Code 1.90 or newer and Qasmith CLI 0.9.0 or later. Install the Qasmith extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Quvly.qasmith-language) or search for "Qasmith" in the VS Code Extensions view.
 
-```sh
-code --install-extension editors/vscode/qasmith-language-0.9.0.vsix
-```
-
-Use **Extensions → Install from VSIX…** if the `code` command is unavailable. Put Qasmith on PATH or set its absolute path in User Settings. Open a project directory and grant Workspace Trust to enable compiler processes. Highlighting, bracket matching, comment toggling, indentation, folding and snippets are available in Restricted Mode.
+Set the Qasmith executable path in User Settings (`qasmith.executablePath`) or ensure `qasmith` is on your PATH. Open a project directory and grant Workspace Trust to enable compiler processes. Highlighting, bracket matching, comment toggling, indentation, folding and snippets are available in Restricted Mode.
 
 ## Create a QUBO circuit
 
