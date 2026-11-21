@@ -33,7 +33,7 @@ func project(start string) (string, map[string]string, error) {
 		var path string
 		var err error
 		var deps map[string]string
-		
+
 		tomlPath := filepath.Join(dir, "qasmith.toml")
 		if info, tomlErr := os.Lstat(tomlPath); tomlErr == nil && info.Mode().IsRegular() {
 			path = tomlPath
@@ -63,10 +63,10 @@ func readManifest(dir, path string) (map[string]string, error) {
 	if err != nil {
 		return fail("%v", err)
 	}
-	
+
 	var m manifest
 	ext := strings.ToLower(filepath.Ext(path))
-	
+
 	switch ext {
 	case ".toml":
 		if _, err := toml.Decode(string(data), &m); err != nil {
@@ -87,7 +87,7 @@ func readManifest(dir, path string) (map[string]string, error) {
 	default:
 		return fail("unsupported manifest format %q (expected .toml or .json)", ext)
 	}
-	
+
 	if !packageName.MatchString(m.Name) || !version.MatchString(m.Version) {
 		return fail("invalid project name or version")
 	}

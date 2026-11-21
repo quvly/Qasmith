@@ -49,10 +49,10 @@ func runInit(args []string, out, stderr io.Writer) int {
 		fmt.Fprintln(stderr, "usage: qasmith init <project-name> [--template <template>]")
 		return 2
 	}
-	
+
 	projectName := args[0]
 	template := "default"
-	
+
 	// Parse optional flags
 	for i := 1; i < len(args); i++ {
 		if args[i] == "--template" && i+1 < len(args) {
@@ -63,40 +63,40 @@ func runInit(args []string, out, stderr io.Writer) int {
 			return 2
 		}
 	}
-	
+
 	// Validate project name
 	if !isValidProjectName(projectName) {
 		fmt.Fprintln(stderr, "invalid project name: must start with a letter and contain only letters, numbers, hyphens, and underscores")
 		return 1
 	}
-	
+
 	// Create project directory
 	projectDir := filepath.Join(".", projectName)
 	if err := os.MkdirAll(projectDir, 0755); err != nil {
 		fmt.Fprintf(stderr, "failed to create project directory: %v\n", err)
 		return 1
 	}
-	
+
 	// Create src directory
 	srcDir := filepath.Join(projectDir, "src")
 	if err := os.MkdirAll(srcDir, 0755); err != nil {
 		fmt.Fprintf(stderr, "failed to create src directory: %v\n", err)
 		return 1
 	}
-	
+
 	// Create manifest file
 	manifestPath := filepath.Join(projectDir, "qasmith.toml")
 	if _, err := os.Stat(manifestPath); err == nil {
 		fmt.Fprintf(stderr, "manifest already exists: %s\n", manifestPath)
 		return 1
 	}
-	
+
 	manifestContent := fmt.Sprintf(defaultManifest, projectName)
 	if err := os.WriteFile(manifestPath, []byte(manifestContent), 0644); err != nil {
 		fmt.Fprintf(stderr, "failed to write manifest: %v\n", err)
 		return 1
 	}
-	
+
 	// Create main.smith based on template
 	mainPath := filepath.Join(srcDir, "main.smith")
 	mainContent := getTemplateContent(template)
@@ -104,7 +104,7 @@ func runInit(args []string, out, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "failed to write main.smith: %v\n", err)
 		return 1
 	}
-	
+
 	// Create README.md
 	readmePath := filepath.Join(projectDir, "README.md")
 	readmeContent := fmt.Sprintf(readmeTemplate, projectName)
@@ -112,7 +112,7 @@ func runInit(args []string, out, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "failed to write README.md: %v\n", err)
 		return 1
 	}
-	
+
 	// Create .gitignore
 	gitignorePath := filepath.Join(projectDir, ".gitignore")
 	gitignoreContent := `# Qasmith build artifacts
@@ -131,12 +131,12 @@ Thumbs.db
 		fmt.Fprintf(stderr, "failed to write .gitignore: %v\n", err)
 		return 1
 	}
-	
+
 	fmt.Fprintf(out, "Created Qasmith project %q in %s\n", projectName, projectDir)
 	fmt.Fprintf(out, "\nNext steps:\n")
 	fmt.Fprintf(out, "  cd %s\n", projectName)
 	fmt.Fprintf(out, "  qasmith run\n")
-	
+
 	return 0
 }
 

@@ -82,7 +82,7 @@ func TestListModules(t *testing.T) {
 	if len(modules) == 0 {
 		t.Fatal("no core modules found")
 	}
-	
+
 	// Check expected modules are present
 	expected := []string{"rotations", "gates", "math", "utils", "measurement"}
 	for _, e := range expected {
@@ -97,7 +97,7 @@ func TestListModules(t *testing.T) {
 			t.Errorf("Expected core module %q not found in %v", e, modules)
 		}
 	}
-	
+
 	// Verify sorted
 	sorted := make([]string, len(modules))
 	copy(sorted, modules)
