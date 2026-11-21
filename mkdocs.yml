@@ -41,9 +41,6 @@ exclude_docs: |
 plugins:
   - search
 
-hooks:
-  - hooks/set_year.py
-
 markdown_extensions:
   - admonition
   - pymdownx.details
@@ -123,4 +120,4 @@ extra:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/quvly
 
-copyright: Copyright &copy; Quvly
+copyright: Copyright &copy; 2026 Quvly
