@@ -4,6 +4,12 @@ __pycache__/
 *$py.class
 *.so
 
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # MkDocs
 site/
 
@@ -11,3 +17,13 @@ site/
 venv/
 env/
 ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
