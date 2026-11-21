@@ -1,6 +1,6 @@
 # Qasmith
 
-Qasmith is a high-level quantum programming language for developers who want familiar functions, modules, and packages. Version 0.9.1 compiles reusable `.smith` modules to OpenQASM 3.0 and includes a local ideal statevector simulator. The CLI builds with the Go toolchain. The VS Code extension adds live diagnostics, navigation and compiler commands.
+Qasmith is a high-level quantum programming language for developers who want familiar functions, modules, and packages. Version 0.10.1 compiles reusable `.smith` modules to OpenQASM 3.0 and includes a local ideal statevector simulator. The CLI builds with the Go toolchain. The VS Code extension adds live diagnostics, navigation and compiler commands.
 
 ## Built by Quvly
 
@@ -118,6 +118,44 @@ The root [program.smith](program.smith) builds and constrains a generic QUBO, th
 ```
 
 Start with [Building Your First Quantum Optimization Model in Qasmith](docs/optimization/custom-models.md) or browse the [QUBO examples](examples/optimization/qubo-language/README.md).
+
+## Real-World TSP with CSV Data
+
+Qasmith can solve the Traveling Salesman Problem using real-world distance data loaded from CSV files. This makes it easy to work with actual datasets from mapping APIs, logistics systems, or scientific measurements.
+
+### Quick Start
+
+```bash
+# Create a distance matrix CSV
+cat > distances.csv << 'EOF'
+# 4-city distance matrix
+0.00,10.00,15.00,20.00
+10.00,0.00,35.00,25.00
+15.00,35.00,0.00,30.00
+20.00,25.00,30.00,0.00
+EOF
+
+# Generate Smith code from CSV
+qasmith csv-to-smith distances.csv
+
+# Run the TSP solver
+qasmith run distances.smith
+```
+
+The `csv-to-smith` command reads your CSV distance matrix and generates a complete Smith program that uses QAOA to find an approximate solution to the TSP.
+
+### Example Workflow
+
+See the [complete TSP CSV example](examples/tsp-csv/README.md) for:
+- Detailed CSV format specification
+- 5-city working example within simulator limits
+- Python scripts to generate test data
+- Parameter customization guide
+- Troubleshooting tips
+
+### Simulator Limits
+
+The current simulator supports up to **16 qubits**, which limits TSP to **5 cities** (requires `(N-1)²` qubits). The CSV workflow works for any size, but larger problems require a larger simulator or quantum hardware.
 
 ## Documentation
 

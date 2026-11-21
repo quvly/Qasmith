@@ -16,7 +16,7 @@ import (
 	"github.com/quvly/Qasmith/pkg/qasmith"
 )
 
-const usage = "usage: qasmith <compile|run|check|eval|deps|optimize|qaoa|tsp|lsp|init|version> [file] [options]"
+const usage = "usage: qasmith <compile|run|check|eval|deps|optimize|qaoa|tsp|lsp|init|csv-to-smith|version> [file] [options]"
 
 func Run(args []string, out, stderr io.Writer) int {
 	return RunContext(context.Background(), args, out, stderr)
@@ -31,6 +31,9 @@ func RunContext(ctx context.Context, args []string, out, stderr io.Writer) int {
 	args = args[1:]
 	if command == "init" {
 		return runInit(args, out, stderr)
+	}
+	if command == "csv-to-smith" {
+		return runCSVToSmith(args, out, stderr)
 	}
 	if command == "lsp" {
 		if len(args) != 1 || args[0] != "--stdio" {
