@@ -25,7 +25,7 @@ Add the `qasmith` binary to your PATH.
 qasmith version
 ```
 
-Expected output: `Qasmith v0.9.1`
+Expected output: `Qasmith v0.10.0`
 
 ## Your First Quantum Program
 
@@ -359,24 +359,24 @@ path = "./path/to/package"
 
 ### Getting Help
 
-- Check the [Module Resolution Guide](./docs/module-resolution.md)
-- Review [example projects](./examples/)
+- Check the [Module Resolution Guide](../module-resolution.md)
+- Review [example projects](../../examples/)
 - Open an issue on GitHub
 
 ## Next Steps
 
-1. **Explore Examples**: Check out the [examples directory](./examples/)
-2. **Read the Guide**: Study the [Module Resolution Guide](./docs/module-resolution.md)
+1. **Explore Examples**: Check out the [examples directory](../../examples/)
+2. **Read the Guide**: Study the [Module Resolution Guide](../module-resolution.md)
 3. **Try Optimization**: Experiment with QAOA and TSP examples
 4. **Build Projects**: Create your own quantum algorithms
 5. **Contribute**: Help improve Qasmith!
 
 ## Resources
 
-- [Module Resolution Guide](./docs/module-resolution.md)
-- [Standard Library Reference](./docs/stdlib-reference.md)
-- [Example Projects](./examples/)
-- [Contributing Guide](./CONTRIBUTING.md)
+- [Module Resolution Guide](../module-resolution.md)
+- [Core Library Reference](../core-library.md)
+- [Example Projects](../../examples/)
+- [Contributing Guide](../../CONTRIBUTING.md)
 - [GitHub Repository](https://github.com/quvly/Qasmith)
 
 Happy quantum programming!

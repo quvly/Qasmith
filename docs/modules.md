@@ -128,3 +128,7 @@ quantum-utils = { path = "../shared/quantum-utils" }
 A manifest requires a project name and a version in `major.minor.patch` form, optionally with prerelease and build suffixes. Dependency names start with an ASCII letter and may contain ASCII letters, digits, hyphens, and underscores. Dependency paths are relative to the manifest unless absolute and must point to real directories. Roots must be distinct and non-overlapping with other dependency roots. Packages may be inside the project or declared outside it.
 
 The `std/` and `core/` namespaces are reserved. Compilation uses local files and does not fetch packages or run installation scripts.
+
+## Learn More
+
+For comprehensive details on module resolution, project structure, and package management workflows, see the [Module Resolution Guide](module-resolution.md).

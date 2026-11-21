@@ -591,7 +591,7 @@ fn main() -> MeasuredResult {
 
 ## Further Reading
 
-- [Qasmith Language Guide](./language-guide.md)
-- [Standard Library Reference](./stdlib-reference.md)
-- [Optimization Examples](./optimization/README.md)
+- [Qasmith Language Guide](language.md)
+- [Core Library Reference](core-library.md)
+- [Optimization Examples](optimization/index.md)
 - [Contributing to Qasmith](../CONTRIBUTING.md)

@@ -6,11 +6,44 @@ This guide walks you through writing, compiling, and running your first Qasmith 
 
 - Qasmith CLI installed — see [Installation](installation.md)
 
-## Create a Bell state
+## Option 1: Using Project Initialization (Recommended)
 
-Save the following code in a file called `bell.smith`:
+The easiest way to start is with `qasmith init`:
 
-```typescript
+```bash
+# Create a new project
+qasmith init bell-state
+cd bell-state
+```
+
+This creates a complete project structure with a manifest file:
+
+```
+bell-state/
+├── qasmith.toml
+├── README.md
+├── .gitignore
+└── src/
+    └── main.smith
+```
+
+Edit `src/main.smith` to create a Bell state:
+
+```smith
+fn main() -> MeasuredResult {
+    let a = qubit();
+    let b = qubit();
+    h(a);
+    cx(a, b);
+    return measure(a, b);
+}
+```
+
+## Option 2: Creating a Single File
+
+If you prefer to work with a single file, save the following code in a file called `bell.smith`:
+
+```smith
 fn main() -> MeasuredResult {
     let a = qubit();
     let b = qubit();
@@ -89,11 +122,28 @@ You should see roughly equal counts for `00` and `11`, confirming the Bell state
 11: 502
 ```
 
+## Using the Core Library
+
+Qasmith includes a built-in core library with common quantum operations. Let's rewrite our Bell state example using the core library:
+
+```smith
+import { bell } from "core/gates";
+
+fn main() -> MeasuredResult {
+    let a = qubit();
+    let b = qubit();
+    bell(a, b);
+    return measure(a, b);
+}
+```
+
+The core library provides reusable quantum operations without requiring manual setup. See the [Core Library Reference](../core-library.md) for all available modules.
+
 ## Run a classical program
 
 Qasmith can also run classical programs that compute with integers and floats. Save this as `classical.smith`:
 
-```typescript
+```smith
 fn main() -> Int {
     let x = 3 + 5;
     return x;
@@ -114,6 +164,8 @@ Output:
 
 ## What's next
 
+- [Quick Start](quickstart.md) — comprehensive getting started guide
+- [Core Library](../core-library.md) — explore built-in quantum operations
 - [CLI Overview](cli-overview.md) — explore all the Qasmith commands
 - [Language Reference](../language.md) — learn the full language syntax
 - [Modules](../modules.md) — organize code across multiple files

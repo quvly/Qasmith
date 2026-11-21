@@ -70,6 +70,7 @@ nav:
     - Syntax: language.md
     - Circuit Construction: circuit-construction.md
     - Modules: modules.md
+    - Module Resolution: module-resolution.md
     - Core Library: core-library.md
     - Packages: packages.md
   - Optimization:
