@@ -1,35 +1,13 @@
-/qasmith
-*.qasm
-!/tests/golden/*.qasm
-/editors/vscode/node_modules/
-/editors/vscode/out/
-/editors/vscode/.vscode-test/
-/qasmith.exe
-/dist/
-.env
-.env.*
-.envrc
-.agents/
-.codex/
-.claude/
-.cursor/
-.github/copilot-instructions.md
-AGENTS.md
-CLAUDE.md
-GEMINI.md
-TASKS.md
-tasks.md
-PROMPTS.md
-prompts.md
-.DS_Store
-.aider*
-.gemini/
-.windsurf/
-.github/instructions/
-.github/prompts/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 
-# Local phase reports
-/docs/phase-*-compliance.md
+# MkDocs
+site/
 
-# MkDocs build output
-/site/
+# Virtual environment
+venv/
+env/
+ENV/
