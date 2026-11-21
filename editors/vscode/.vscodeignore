@@ -1,7 +1,0 @@
-.gitignore
-src/**
-test/**
-out/test/**
-tsconfig.json
-eslint.config.mjs
-*.vsix
