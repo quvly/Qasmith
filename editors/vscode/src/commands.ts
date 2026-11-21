@@ -42,7 +42,7 @@ async function checkDestination(destination: string): Promise<boolean> {
     }
 }
 
-export function registerCommands(context: vscode.ExtensionContext, output: vscode.OutputChannel, server: Server): void {
+export function registerCommands(context: vscode.ExtensionContext, output: vscode.LogOutputChannel, server: Server): void {
     let running = false;
     async function execute(operation: Operation, preview = false): Promise<boolean> {
         if (running) {

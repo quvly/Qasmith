@@ -14,7 +14,7 @@ export class Server {
     private pending: Promise<void> = Promise.resolve();
     private closed = false;
 
-    constructor(private readonly output: vscode.OutputChannel) {}
+    constructor(private readonly output: vscode.LogOutputChannel) {}
 
     restart(): Promise<void> {
         this.pending = this.pending.then(async () => {
@@ -42,7 +42,7 @@ export class Server {
         const debounceMs = integer(config.get('diagnostics.debounceMs', 200), 0, 2000, 'Diagnostics debounce');
         const command = await executable();
         const watcher = vscode.workspace.createFileSystemWatcher('**/{*.smith,qasmith.json}');
-        const client = new LanguageClient('qasmith', 'Qasmith', { command, args: ['lsp', '--stdio'] }, {
+        const client = new LanguageClient('Qasmith', { command, args: ['lsp', '--stdio'] }, {
             documentSelector: [{ scheme: 'file', language: 'qasmith' }],
             outputChannel: this.output,
             traceOutputChannel: this.output,

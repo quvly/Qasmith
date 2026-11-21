@@ -79,7 +79,7 @@ class Server {
         const debounceMs = (0, compiler_1.integer)(config.get('diagnostics.debounceMs', 200), 0, 2000, 'Diagnostics debounce');
         const command = await executable();
         const watcher = vscode.workspace.createFileSystemWatcher('**/{*.smith,qasmith.json}');
-        const client = new node_1.LanguageClient('qasmith', 'Qasmith', { command, args: ['lsp', '--stdio'] }, {
+        const client = new node_1.LanguageClient('Qasmith', { command, args: ['lsp', '--stdio'] }, {
             documentSelector: [{ scheme: 'file', language: 'qasmith' }],
             outputChannel: this.output,
             traceOutputChannel: this.output,

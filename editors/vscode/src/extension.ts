@@ -5,7 +5,7 @@ import { Server } from './languageClient';
 let server: Server | undefined;
 
 export function activate(context: vscode.ExtensionContext): void {
-    const output = vscode.window.createOutputChannel('Qasmith');
+    const output = vscode.window.createOutputChannel('Qasmith', { log: true });
     const instance = new Server(output);
     server = instance;
     registerCommands(context, output, instance);

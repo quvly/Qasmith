@@ -40,7 +40,7 @@ const commands_1 = require("./commands");
 const languageClient_1 = require("./languageClient");
 let server;
 function activate(context) {
-    const output = vscode.window.createOutputChannel('Qasmith');
+    const output = vscode.window.createOutputChannel('Qasmith', { log: true });
     const instance = new languageClient_1.Server(output);
     server = instance;
     (0, commands_1.registerCommands)(context, output, instance);
