@@ -38,12 +38,18 @@ exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const commands_1 = require("./commands");
 const languageClient_1 = require("./languageClient");
+const circuitVisualizer_1 = require("./circuitVisualizer");
 let server;
+let visualizer;
 function activate(context) {
     const output = vscode.window.createOutputChannel('Qasmith', { log: true });
     const instance = new languageClient_1.Server(output);
     server = instance;
     (0, commands_1.registerCommands)(context, output, instance);
+    // Register circuit visualizer
+    const circuitViz = new circuitVisualizer_1.CircuitVisualizer(context.extensionUri);
+    visualizer = circuitViz;
+    context.subscriptions.push(vscode.window.registerWebviewViewProvider(circuitVisualizer_1.CircuitVisualizer.viewType, circuitViz));
     context.subscriptions.push(output, vscode.workspace.onDidGrantWorkspaceTrust(() => void instance.restart()), vscode.workspace.onDidChangeConfiguration(event => {
         if (['executablePath', 'lsp', 'diagnostics'].some(key => event.affectsConfiguration(`qasmith.${key}`))) {
             void instance.restart();
@@ -52,6 +58,7 @@ function activate(context) {
     void instance.restart();
 }
 async function deactivate() {
+    visualizer?.dispose();
     await server?.dispose();
     server = undefined;
 }

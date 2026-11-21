@@ -30,7 +30,8 @@
     "onCommand:qasmith.optimize",
     "onCommand:qasmith.preview",
     "onCommand:qasmith.restart",
-    "onCommand:qasmith.output"
+    "onCommand:qasmith.output",
+    "onCommand:qasmith.visualizeCircuit"
   ],
   "main": "./out/src/extension.js",
   "capabilities": {
@@ -43,6 +44,24 @@
     }
   },
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "qasmith-circuit",
+          "title": "Qasmith Circuit",
+          "icon": "$(circuit-board)"
+        }
+      ]
+    },
+    "views": {
+      "qasmith-circuit": [
+        {
+          "type": "webview",
+          "id": "qasmith.circuitView",
+          "name": "Circuit Visualization"
+        }
+      ]
+    },
     "languages": [
       {
         "id": "qasmith",
@@ -113,6 +132,12 @@
         "command": "qasmith.output",
         "title": "Show Compiler Output",
         "category": "Qasmith"
+      },
+      {
+        "command": "qasmith.visualizeCircuit",
+        "title": "Visualize Quantum Circuit",
+        "category": "Qasmith",
+        "icon": "$(graph)"
       }
     ],
     "configuration": {
