@@ -2,7 +2,7 @@
   "name": "qasmith-language",
   "displayName": "Qasmith Smith Tools by Quvly",
   "description": "Smith language support and local quantum compiler integration",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "publisher": "Quvly",
   "icon": "icon.png",
   "license": "Apache-2.0",

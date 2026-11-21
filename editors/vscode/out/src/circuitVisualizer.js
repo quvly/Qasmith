@@ -76,10 +76,24 @@ class CircuitVisualizer {
     _updateCircuit(document) {
         if (!this._view)
             return;
-        const circuit = (0, circuitLayout_1.parseCircuit)(document.getText());
-        const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
-        const svg = (0, circuitLayout_1.renderCircuit)(circuit, layout);
-        this._view.webview.html = svg ? this._getHtml(svg) : this._getEmptyHtml();
+        try {
+            const circuit = (0, circuitLayout_1.parseCircuit)(document.getText());
+            if (circuit.qubits === 0) {
+                this._view.webview.html = this._getNoQubitsHtml();
+                return;
+            }
+            if (circuit.operations.length === 0) {
+                this._view.webview.html = this._getNoGatesHtml();
+                return;
+            }
+            const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
+            const svg = (0, circuitLayout_1.renderCircuit)(circuit, layout);
+            this._view.webview.html = this._getHtml(svg);
+        }
+        catch (err) {
+            const message = err instanceof Error ? err.message : String(err);
+            this._view.webview.html = this._getErrorHtml(message);
+        }
     }
     _getEmptyHtml() {
         return `<!DOCTYPE html>
@@ -94,6 +108,63 @@ class CircuitVisualizer {
 <body>
   <div class="empty">
     <p>Open a .smith file to visualize the quantum circuit</p>
+  </div>
+</body>
+</html>`;
+    }
+    _getNoQubitsHtml() {
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; padding: 20px; background: var(--vscode-editor-background); color: var(--vscode-editor-foreground); font-family: var(--vscode-font-family); }
+    .info { text-align: center; color: var(--vscode-descriptionForeground); margin-top: 40px; }
+    code { background: var(--vscode-textBlockQuote-background); padding: 2px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <p>No qubit allocations found.</p>
+    <p>Declare qubits with <code>let q = qubit()</code> or <code>let q = qreg(3)</code></p>
+  </div>
+</body>
+</html>`;
+    }
+    _getNoGatesHtml() {
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; padding: 20px; background: var(--vscode-editor-background); color: var(--vscode-editor-foreground); font-family: var(--vscode-font-family); }
+    .info { text-align: center; color: var(--vscode-descriptionForeground); margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <p>No gate operations found.</p>
+    <p>Add quantum gates like <code>h(q)</code>, <code>x(q)</code>, or <code>cx(q0, q1)</code></p>
+  </div>
+</body>
+</html>`;
+    }
+    _getErrorHtml(message) {
+        const escaped = message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; padding: 20px; background: var(--vscode-editor-background); color: var(--vscode-editor-foreground); font-family: var(--vscode-font-family); }
+    .error { text-align: center; color: var(--vscode-errorForeground, #f44); margin-top: 40px; }
+    .error pre { text-align: left; background: var(--vscode-textBlockQuote-background); padding: 10px; border-radius: 4px; overflow-x: auto; margin-top: 10px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="error">
+    <p>Circuit visualization error:</p>
+    <pre>${escaped}</pre>
   </div>
 </body>
 </html>`;

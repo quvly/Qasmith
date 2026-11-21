@@ -209,15 +209,18 @@ const circuitLayout_1 = require("../src/circuitLayout");
     node_assert_1.strict.equal(cx.column, 1, 'CX in col 1');
     node_assert_1.strict.deepEqual(cx.operation.qubits, [0, 3], 'CX spans non-adjacent qubits');
 });
-(0, node_test_1.test)('parseCircuit: Ignore non-gate function calls', () => {
+(0, node_test_1.test)('parseCircuit: Measure is a valid operation', () => {
     const code = `
     let q = qubit();
     measure(q);
     h(q);
   `;
     const circuit = (0, circuitLayout_1.parseCircuit)(code);
-    node_assert_1.strict.equal(circuit.operations.length, 1);
-    node_assert_1.strict.equal(circuit.operations[0].name, 'H');
+    // measure and h are both valid operations
+    node_assert_1.strict.equal(circuit.operations.length, 2);
+    node_assert_1.strict.equal(circuit.operations[0].name, 'MEASURE');
+    node_assert_1.strict.equal(circuit.operations[0].type, circuitLayout_1.GateType.Measure);
+    node_assert_1.strict.equal(circuit.operations[1].name, 'H');
 });
 (0, node_test_1.test)('parseCircuit: CNOT alias', () => {
     const code = `
@@ -229,4 +232,240 @@ const circuitLayout_1 = require("../src/circuitLayout");
     const gate = circuit.operations[0];
     node_assert_1.strict.equal(gate.name, 'CNOT');
     node_assert_1.strict.equal(gate.type, circuitLayout_1.GateType.Controlled);
+});
+(0, node_test_1.test)('parseCircuit: Single-qubit gates H, X, RX, RY and RZ in sequence', () => {
+    const code = `
+    let q = qubit();
+    h(q);
+    x(q);
+    rx(pi / 2.0, q);
+    ry(pi / 4.0, q);
+    rz(pi / 3.0, q);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 1);
+    node_assert_1.strict.equal(circuit.operations.length, 5);
+    const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
+    // Each gate should be in its own column (all on same qubit)
+    node_assert_1.strict.equal(layout.numColumns, 5);
+    node_assert_1.strict.equal(circuit.operations[0].name, 'H');
+    node_assert_1.strict.equal(circuit.operations[1].name, 'X');
+    node_assert_1.strict.equal(circuit.operations[2].name, 'RX');
+    node_assert_1.strict.ok(circuit.operations[2].params);
+    node_assert_1.strict.ok(Math.abs(circuit.operations[2].params[0] - Math.PI / 2) < 0.001);
+    node_assert_1.strict.equal(circuit.operations[3].name, 'RY');
+    node_assert_1.strict.ok(circuit.operations[3].params);
+    node_assert_1.strict.ok(Math.abs(circuit.operations[3].params[0] - Math.PI / 4) < 0.001);
+    node_assert_1.strict.equal(circuit.operations[4].name, 'RZ');
+    node_assert_1.strict.ok(circuit.operations[4].params);
+    node_assert_1.strict.ok(Math.abs(circuit.operations[4].params[0] - Math.PI / 3) < 0.001);
+});
+(0, node_test_1.test)('parseCircuit: Two independently allocated qubits with CNOT', () => {
+    const code = `
+    let a = qubit();
+    let b = qubit();
+    cx(a, b);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 2);
+    node_assert_1.strict.equal(circuit.operations.length, 1);
+    node_assert_1.strict.equal(circuit.operations[0].name, 'CX');
+    node_assert_1.strict.equal(circuit.operations[0].type, circuitLayout_1.GateType.Controlled);
+    node_assert_1.strict.deepEqual(circuit.operations[0].qubits, [0, 1]);
+});
+(0, node_test_1.test)('parseCircuit: Three independently allocated qubits with non-adjacent CNOT', () => {
+    const code = `
+    let a = qubit();
+    let b = qubit();
+    let c = qubit();
+    cx(a, c);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 3);
+    node_assert_1.strict.equal(circuit.operations.length, 1);
+    node_assert_1.strict.deepEqual(circuit.operations[0].qubits, [0, 2]);
+});
+(0, node_test_1.test)('parseCircuit: qreg(n) function-call syntax', () => {
+    const code = `
+    let q = qreg(3);
+    h(q[0]);
+    cx(q[0], q[2]);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 3);
+    node_assert_1.strict.equal(circuit.operations.length, 2);
+    node_assert_1.strict.equal(circuit.operations[0].name, 'H');
+    node_assert_1.strict.deepEqual(circuit.operations[0].qubits, [0]);
+    node_assert_1.strict.equal(circuit.operations[1].name, 'CX');
+    node_assert_1.strict.deepEqual(circuit.operations[1].qubits, [0, 2]);
+});
+(0, node_test_1.test)('parseCircuit: Four-qubit register with sequential CNOT operations', () => {
+    const code = `
+    let q = qreg(4);
+    h(q[0]);
+    h(q[1]);
+    h(q[2]);
+    h(q[3]);
+    cx(q[0], q[1]);
+    cx(q[1], q[2]);
+    cx(q[2], q[3]);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 4);
+    node_assert_1.strict.equal(circuit.operations.length, 7);
+    // Verify all operations parsed correctly
+    const cxOps = circuit.operations.filter(op => op.name === 'CX');
+    node_assert_1.strict.equal(cxOps.length, 3);
+    node_assert_1.strict.deepEqual(cxOps[0].qubits, [0, 1]);
+    node_assert_1.strict.deepEqual(cxOps[1].qubits, [1, 2]);
+    node_assert_1.strict.deepEqual(cxOps[2].qubits, [2, 3]);
+    // All gates should not overlap
+    const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
+    for (let i = 0; i < layout.assignments.length; i++) {
+        for (let j = i + 1; j < layout.assignments.length; j++) {
+            const a = layout.assignments[i];
+            const b = layout.assignments[j];
+            const overlap = a.operation.qubits.some(q => b.operation.qubits.includes(q));
+            if (a.column === b.column) {
+                node_assert_1.strict.ok(!overlap, `Operations at column ${a.column} should not share qubits`);
+            }
+        }
+    }
+});
+(0, node_test_1.test)('parseCircuit: GHZ state construction', () => {
+    const code = `
+    let q = qreg(4);
+    h(q[0]);
+    cx(q[0], q[1]);
+    cx(q[0], q[2]);
+    cx(q[0], q[3]);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 4);
+    node_assert_1.strict.equal(circuit.operations.length, 4);
+    node_assert_1.strict.equal(circuit.operations[0].name, 'H');
+    node_assert_1.strict.deepEqual(circuit.operations[0].qubits, [0]);
+    const cxOps = circuit.operations.slice(1);
+    for (const cx of cxOps) {
+        node_assert_1.strict.equal(cx.name, 'CX');
+        node_assert_1.strict.equal(cx.qubits[0], 0, 'Control should always be q[0]');
+    }
+});
+(0, node_test_1.test)('parseCircuit: Whole-register measurement', () => {
+    const code = `
+    let q = qreg(3);
+    h(q[0]);
+    cx(q[0], q[1]);
+    cx(q[0], q[2]);
+    return measure(q);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 3);
+    const measures = circuit.operations.filter(op => op.type === circuitLayout_1.GateType.Measure);
+    node_assert_1.strict.equal(measures.length, 3, 'Should measure all 3 qubits');
+    node_assert_1.strict.deepEqual(measures[0].qubits, [0]);
+    node_assert_1.strict.deepEqual(measures[1].qubits, [1]);
+    node_assert_1.strict.deepEqual(measures[2].qubits, [2]);
+});
+(0, node_test_1.test)('parseCircuit: Selected register-element measurement', () => {
+    const code = `
+    let q = qreg(4);
+    h(q[0]);
+    cx(q[0], q[2]);
+    return measure(q[0], q[2]);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 4);
+    const measures = circuit.operations.filter(op => op.type === circuitLayout_1.GateType.Measure);
+    node_assert_1.strict.equal(measures.length, 2, 'Should measure q[0] and q[2]');
+    node_assert_1.strict.deepEqual(measures[0].qubits, [0]);
+    node_assert_1.strict.deepEqual(measures[1].qubits, [2]);
+});
+(0, node_test_1.test)('parseCircuit: Measurement with return statement', () => {
+    const code = `
+    let a = qubit();
+    let b = qubit();
+    h(a);
+    cx(a, b);
+    return measure(a, b);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    const measures = circuit.operations.filter(op => op.type === circuitLayout_1.GateType.Measure);
+    node_assert_1.strict.equal(measures.length, 2);
+});
+(0, node_test_1.test)('parseCircuit: Allocated but unmeasured qubits', () => {
+    const code = `
+    let a = qubit();
+    let b = qubit();
+    let c = qubit();
+    h(a);
+    cx(a, b);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    node_assert_1.strict.equal(circuit.qubits, 3);
+    node_assert_1.strict.equal(circuit.operations.length, 2);
+    const measures = circuit.operations.filter(op => op.type === circuitLayout_1.GateType.Measure);
+    node_assert_1.strict.equal(measures.length, 0, 'No measurements should be present');
+});
+(0, node_test_1.test)('layoutCircuit: Long sequences of parameterized rotation gates', () => {
+    const code = `
+    let q = qubit();
+    rx(pi / 2.0, q);
+    ry(pi / 4.0, q);
+    rz(pi / 3.0, q);
+    rx(pi / 6.0, q);
+    ry(pi / 8.0, q);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
+    // All on same qubit, so each gate gets its own column
+    node_assert_1.strict.equal(layout.numColumns, 5);
+    // Verify column widths are not uniform
+    const widths = layout.columnWidths;
+    node_assert_1.strict.ok(widths.length === 5);
+    // All widths should be positive
+    for (const w of widths) {
+        node_assert_1.strict.ok(w > 0);
+    }
+    // Render and verify SVG is valid
+    const svg = (0, circuitLayout_1.renderCircuit)(circuit, layout);
+    node_assert_1.strict.ok(svg.includes('<svg'));
+    node_assert_1.strict.ok(svg.includes('RX'));
+    node_assert_1.strict.ok(svg.includes('RY'));
+    node_assert_1.strict.ok(svg.includes('RZ'));
+});
+(0, node_test_1.test)('renderCircuit: Circuits with multi-qubit operations and measurements', () => {
+    const code = `
+    let q = qreg(3);
+    h(q[0]);
+    cx(q[0], q[1]);
+    cx(q[1], q[2]);
+    return measure(q);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
+    const svg = (0, circuitLayout_1.renderCircuit)(circuit, layout);
+    node_assert_1.strict.ok(svg.includes('<svg'));
+    node_assert_1.strict.ok(svg.includes('H'));
+    // Should have measurement symbols
+    node_assert_1.strict.ok(svg.includes('path') || svg.includes('MEASURE'), 'Should contain measurement rendering');
+});
+(0, node_test_1.test)('renderCircuit: No overlapping gates with rotation sequence', () => {
+    const code = `
+    let q = qubit();
+    h(q);
+    x(q);
+    rx(pi / 2.0, q);
+    ry(pi / 4.0, q);
+    rz(pi / 3.0, q);
+  `;
+    const circuit = (0, circuitLayout_1.parseCircuit)(code);
+    const layout = (0, circuitLayout_1.layoutCircuit)(circuit);
+    // Verify column spacing prevents overlap
+    const totalWidth = layout.columnWidths.reduce((sum, w) => sum + w, 0);
+    node_assert_1.strict.ok(totalWidth > layout.numColumns * 44, 'Total width should exceed minimum if gates are wider');
+    // Each gate on same qubit should be in separate column
+    const cols = layout.assignments.map(a => a.column);
+    const uniqueCols = new Set(cols);
+    node_assert_1.strict.equal(uniqueCols.size, cols.length, 'All gates should be in separate columns');
 });

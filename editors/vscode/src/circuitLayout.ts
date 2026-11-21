@@ -4,6 +4,7 @@ export enum GateType {
   CZ = 'cz',
   Swap = 'swap',
   MultiQubit = 'multi',
+  Measure = 'measure',
 }
 
 export interface Operation {
@@ -23,9 +24,16 @@ export interface ColumnAssignment {
   column: number;
 }
 
+export interface ColumnInfo {
+  width: number;
+  centerX: number;
+}
+
 export interface LayoutResult {
   assignments: ColumnAssignment[];
   numColumns: number;
+  columnWidths: number[];
+  columnCenters: number[];
 }
 
 export function classifyGate(name: string, qubitCount: number): GateType {
@@ -51,9 +59,10 @@ function evaluateMath(expr: string): number | undefined {
 export function parseCircuit(code: string): Circuit {
   const operations: Operation[] = [];
   const qubitMap = new Map<string, number>();
+  const registerMap = new Map<string, number[]>(); // track registers
   let nextQubit = 0;
   const lines = code.split('\n');
-  const skipNames = new Set(['qubit', 'qreg', 'measure', 'let', 'const', 'var', 'return', 'if', 'for', 'while', 'fn', 'pub', 'import']);
+  const skipNames = new Set(['qubit', 'let', 'const', 'var', 'return', 'if', 'for', 'while', 'fn', 'pub', 'import']);
 
   for (const line of lines) {
     // Parse: let q = qubit() or q = qubit()
@@ -64,12 +73,62 @@ export function parseCircuit(code: string): Circuit {
     }
 
     // Parse: let q = qreg<N>() or q = qreg<N>()
-    const qregAlloc = line.match(/(\w+)\s*=\s*qreg\s*<\s*(\d+)\s*>\s*\(\s*\)/);
-    if (qregAlloc) {
-      const base = qregAlloc[1];
-      const size = parseInt(qregAlloc[2]);
+    const qregGeneric = line.match(/(\w+)\s*=\s*qreg\s*<\s*(\d+)\s*>\s*\(\s*\)/);
+    if (qregGeneric) {
+      const base = qregGeneric[1];
+      const size = parseInt(qregGeneric[2]);
+      const indices: number[] = [];
       for (let j = 0; j < size; j++) {
-        qubitMap.set(`${base}[${j}]`, nextQubit++);
+        const idx = nextQubit++;
+        qubitMap.set(`${base}[${j}]`, idx);
+        indices.push(idx);
+      }
+      registerMap.set(base, indices);
+      continue;
+    }
+
+    // Parse: let q = qreg(n) - function call syntax
+    const qregFunc = line.match(/(\w+)\s*=\s*qreg\s*\(\s*(\d+)\s*\)/);
+    if (qregFunc) {
+      const base = qregFunc[1];
+      const size = parseInt(qregFunc[2]);
+      const indices: number[] = [];
+      for (let j = 0; j < size; j++) {
+        const idx = nextQubit++;
+        qubitMap.set(`${base}[${j}]`, idx);
+        indices.push(idx);
+      }
+      registerMap.set(base, indices);
+      continue;
+    }
+
+    // Parse measurement: measure(q) or measure(q[0]) or measure(q[0], q[1]) or return measure(...)
+    const measureMatch = line.match(/(?:return\s+)?measure\s*\(\s*([^)]+)\s*\)/);
+    if (measureMatch) {
+      const argsStr = measureMatch[1].trim();
+      
+      // Split by comma to handle multiple arguments
+      const args = argsStr.split(',').map(arg => arg.trim());
+      
+      for (const arg of args) {
+        // Check if it's a register
+        if (registerMap.has(arg)) {
+          const indices = registerMap.get(arg)!;
+          for (const idx of indices) {
+            operations.push({
+              name: 'MEASURE',
+              qubits: [idx],
+              type: GateType.Measure,
+            });
+          }
+        } else if (qubitMap.has(arg)) {
+          // Single qubit measurement
+          operations.push({
+            name: 'MEASURE',
+            qubits: [qubitMap.get(arg)!],
+            type: GateType.Measure,
+          });
+        }
       }
       continue;
     }
@@ -79,7 +138,7 @@ export function parseCircuit(code: string): Circuit {
     if (!callMatch) continue;
 
     const gateName = callMatch[1];
-    if (skipNames.has(gateName.toLowerCase())) continue;
+    if (skipNames.has(gateName.toLowerCase()) || gateName.toLowerCase() === 'qreg') continue;
 
     const arg1 = callMatch[2].trim();
     const arg2 = callMatch[3]?.trim();
@@ -121,30 +180,79 @@ export function parseCircuit(code: string): Circuit {
 
 export function layoutCircuit(circuit: Circuit): LayoutResult {
   if (circuit.operations.length === 0) {
-    return { assignments: [], numColumns: 0 };
+    return { assignments: [], numColumns: 0, columnWidths: [], columnCenters: [] };
   }
 
   const nextAvailable = new Array(circuit.qubits).fill(0);
   const assignments: ColumnAssignment[] = [];
+  const columnGates = new Map<number, Operation[]>();
   let maxCol = 0;
 
   for (const op of circuit.operations) {
     // Place in earliest column where all target qubits are free
     const col = Math.max(...op.qubits.map(q => nextAvailable[q]));
     assignments.push({ operation: op, column: col });
+    
+    // Track gates in each column
+    if (!columnGates.has(col)) {
+      columnGates.set(col, []);
+    }
+    columnGates.get(col)!.push(op);
+    
     for (const q of op.qubits) {
       nextAvailable[q] = col + 1;
     }
     if (col > maxCol) maxCol = col;
   }
 
-  return { assignments, numColumns: maxCol + 1 };
+  const numColumns = maxCol + 1;
+  const columnWidths: number[] = [];
+  const minGap = 20; // minimum gap between columns
+
+  // Calculate width for each column based on widest gate
+  for (let col = 0; col < numColumns; col++) {
+    const gates = columnGates.get(col) || [];
+    let maxWidth = 44; // minimum gate width
+    
+    for (const op of gates) {
+      const width = calculateGateWidth(op);
+      if (width > maxWidth) maxWidth = width;
+    }
+    
+    columnWidths.push(maxWidth + minGap);
+  }
+
+  // Calculate center positions for each column
+  const columnCenters: number[] = [];
+  let currentX = 0;
+  for (let col = 0; col < numColumns; col++) {
+    columnCenters.push(currentX + columnWidths[col] / 2);
+    currentX += columnWidths[col];
+  }
+
+  return { assignments, numColumns, columnWidths, columnCenters };
+}
+
+function calculateGateWidth(op: Operation): number {
+  const minWidth = 44;
+  
+  if (op.type === GateType.Measure) {
+    return 40; // measurement symbol width
+  }
+  
+  let label = op.name;
+  if (op.params && op.params.length > 0) {
+    const formatted = formatAngle(op.params[0]);
+    label += `(${formatted})`;
+  }
+  
+  // Estimate width based on label length
+  const estimatedWidth = label.length * 9 + 12;
+  return Math.max(minWidth, estimatedWidth);
 }
 
 export interface RenderOptions {
   qubitSpacing?: number;
-  colSpacing?: number;
-  gateSize?: number;
   leftMargin?: number;
   topMargin?: number;
   rightMargin?: number;
@@ -153,8 +261,6 @@ export interface RenderOptions {
 
 const DEFAULT_OPTIONS: Required<RenderOptions> = {
   qubitSpacing: 60,
-  colSpacing: 70,
-  gateSize: 44,
   leftMargin: 50,
   topMargin: 20,
   rightMargin: 20,
@@ -168,10 +274,12 @@ export function renderCircuit(circuit: Circuit, layout: LayoutResult, opts?: Ren
     return '';
   }
 
-  const width = o.leftMargin + layout.numColumns * o.colSpacing + o.rightMargin;
+  // Calculate total width based on all column widths
+  const totalWidth = layout.columnWidths.reduce((sum, w) => sum + w, 0);
+  const width = o.leftMargin + totalWidth + o.rightMargin;
   const height = o.topMargin + circuit.qubits * o.qubitSpacing + o.bottomMargin;
 
-  const colX = (col: number) => o.leftMargin + col * o.colSpacing + o.colSpacing / 2;
+  const colX = (col: number) => o.leftMargin + layout.columnCenters[col];
   const qubitY = (q: number) => o.topMargin + q * o.qubitSpacing + o.qubitSpacing / 2;
 
   let svg = '';
@@ -198,19 +306,17 @@ export function renderCircuit(circuit: Circuit, layout: LayoutResult, opts?: Ren
   for (const [col, colAssignments] of columns) {
     const x = colX(col);
     for (const { operation } of colAssignments) {
-      svg += renderOperation(operation, x, qubitY, o.gateSize);
+      svg += renderOperation(operation, x, qubitY);
     }
   }
 
   return `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">${svg}</svg>`;
 }
 
-function renderOperation(op: Operation, x: number, qubitY: (q: number) => number, gateSize: number): string {
-  const halfSize = gateSize / 2;
-
+function renderOperation(op: Operation, x: number, qubitY: (q: number) => number): string {
   switch (op.type) {
     case GateType.SingleQubit:
-      return renderSingleQubitGate(op, x, qubitY(op.qubits[0]), halfSize);
+      return renderSingleQubitGate(op, x, qubitY(op.qubits[0]));
 
     case GateType.Controlled:
       return renderControlledGate(op, x, qubitY);
@@ -222,18 +328,21 @@ function renderOperation(op: Operation, x: number, qubitY: (q: number) => number
       return renderSwapGate(op, x, qubitY);
 
     case GateType.MultiQubit:
-      return renderMultiQubitGate(op, x, qubitY, halfSize);
+      return renderMultiQubitGate(op, x, qubitY);
+
+    case GateType.Measure:
+      return renderMeasurement(op, x, qubitY(op.qubits[0]));
   }
 }
 
-function renderSingleQubitGate(op: Operation, x: number, y: number, halfSize: number): string {
+function renderSingleQubitGate(op: Operation, x: number, y: number): string {
   let label = op.name;
   if (op.params && op.params.length > 0) {
     const formatted = formatAngle(op.params[0]);
     label += `(${formatted})`;
   }
 
-  const size = Math.max(halfSize * 2, label.length * 9 + 12);
+  const size = calculateGateWidth(op);
   const h = size / 2;
   const fontSize = label.length > 6 ? 10 : 13;
 
@@ -317,10 +426,12 @@ function renderSwapGate(op: Operation, x: number, qubitY: (q: number) => number)
   ].join('');
 }
 
-function renderMultiQubitGate(op: Operation, x: number, qubitY: (q: number) => number, halfSize: number): string {
+function renderMultiQubitGate(op: Operation, x: number, qubitY: (q: number) => number): string {
   const ys = op.qubits.map(q => qubitY(q));
   const minY = Math.min(...ys);
   const maxY = Math.max(...ys);
+  const size = calculateGateWidth(op);
+  const halfSize = size / 2;
 
   let svg = '';
   // Vertical connection line
@@ -328,10 +439,27 @@ function renderMultiQubitGate(op: Operation, x: number, qubitY: (q: number) => n
 
   // Rectangle on each qubit
   for (const y of ys) {
-    svg += `<rect x="${x - halfSize}" y="${y - halfSize}" width="${halfSize * 2}" height="${halfSize * 2}" rx="4" fill="var(--vscode-charts-blue, #4a9eff)" stroke="var(--vscode-charts-blue, #2563eb)" stroke-width="1.5"/>`;
+    svg += `<rect x="${x - halfSize}" y="${y - halfSize}" width="${size}" height="${size}" rx="4" fill="var(--vscode-charts-blue, #4a9eff)" stroke="var(--vscode-charts-blue, #2563eb)" stroke-width="1.5"/>`;
     svg += `<text x="${x}" y="${y + 4}" fill="white" font-family="monospace" font-size="13" font-weight="600" text-anchor="middle">${escapeXml(op.name)}</text>`;
   }
   return svg;
+}
+
+function renderMeasurement(op: Operation, x: number, y: number): string {
+  // Standard quantum measurement symbol: a meter with an arc and diagonal line
+  const width = 36;
+  const height = 36;
+  const halfW = width / 2;
+  const halfH = height / 2;
+
+  return [
+    // Background rectangle
+    `<rect x="${x - halfW}" y="${y - halfH}" width="${width}" height="${height}" rx="4" fill="var(--vscode-editor-background, #1e1e1e)" stroke="var(--vscode-editor-foreground, #aaa)" stroke-width="1.5"/>`,
+    // Arc (meter needle arc)
+    `<path d="M ${x - 10} ${y + 8} Q ${x} ${y - 12} ${x + 10} ${y + 8}" fill="none" stroke="var(--vscode-editor-foreground, #aaa)" stroke-width="1.5"/>`,
+    // Diagonal needle line
+    `<line x1="${x}" y1="${y + 8}" x2="${x + 8}" y2="${y - 8}" stroke="var(--vscode-editor-foreground, #aaa)" stroke-width="1.5"/>`,
+  ].join('');
 }
 
 function escapeXml(s: string): string {
