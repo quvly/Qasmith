@@ -624,10 +624,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-a-bell-state" class="md-nav__link">
+  <a href="#option-1-using-project-initialization-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Create a Bell state
+        Option 1: Using Project Initialization (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-2-creating-a-single-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 2: Creating a Single File
       
     </span>
   </a>
@@ -672,6 +683,17 @@
     <span class="md-ellipsis">
       
         Run the simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-core-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using the Core Library
       
     </span>
   </a>
@@ -869,6 +891,34 @@
     
   
     Modules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../module-resolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Resolution
   
 
     
@@ -2427,10 +2477,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#create-a-bell-state" class="md-nav__link">
+  <a href="#option-1-using-project-initialization-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Create a Bell state
+        Option 1: Using Project Initialization (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option-2-creating-a-single-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option 2: Creating a Single File
       
     </span>
   </a>
@@ -2475,6 +2536,17 @@
     <span class="md-ellipsis">
       
         Run the simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-core-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using the Core Library
       
     </span>
   </a>
@@ -2529,15 +2601,38 @@
 <ul>
 <li>Qasmith CLI installed — see <a href="../installation/">Installation</a></li>
 </ul>
-<h2 id="create-a-bell-state">Create a Bell state<a class="headerlink" href="#create-a-bell-state" title="Permanent link">&para;</a></h2>
-<p>Save the following code in a file called <code>bell.smith</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">fn</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nx">MeasuredResult</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">qubit</span><span class="p">();</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">qubit</span><span class="p">();</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nx">h</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nx">cx</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">);</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">measure</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">);</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
+<h2 id="option-1-using-project-initialization-recommended">Option 1: Using Project Initialization (Recommended)<a class="headerlink" href="#option-1-using-project-initialization-recommended" title="Permanent link">&para;</a></h2>
+<p>The easiest way to start is with <code>qasmith init</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Create a new project</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>qasmith<span class="w"> </span>init<span class="w"> </span>bell-state
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>bell-state
+</code></pre></div>
+<p>This creates a complete project structure with a manifest file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>bell-state/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── qasmith.toml
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── README.md
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>├── .gitignore
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>└── src/
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    └── main.smith
+</code></pre></div>
+<p>Edit <code>src/main.smith</code> to create a Bell state:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fn main() -&gt; MeasuredResult {
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    let a = qubit();
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    let b = qubit();
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    h(a);
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    cx(a, b);
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    return measure(a, b);
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>}
+</code></pre></div>
+<h2 id="option-2-creating-a-single-file">Option 2: Creating a Single File<a class="headerlink" href="#option-2-creating-a-single-file" title="Permanent link">&para;</a></h2>
+<p>If you prefer to work with a single file, save the following code in a file called <code>bell.smith</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>fn main() -&gt; MeasuredResult {
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    let a = qubit();
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    let b = qubit();
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    h(a);
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    cx(a, b);
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    return measure(a, b);
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>}
 </code></pre></div>
 <p>This program:</p>
 <ol>
@@ -2548,55 +2643,69 @@
 </ol>
 <h2 id="check-the-program">Check the program<a class="headerlink" href="#check-the-program" title="Permanent link">&para;</a></h2>
 <p>Verify the program is well-formed:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>qasmith<span class="w"> </span>check<span class="w"> </span>bell.smith
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>qasmith<span class="w"> </span>check<span class="w"> </span>bell.smith
 </code></pre></div>
 <p><code>check</code> reports any errors but does not emit output. Exit status is 0 on success, 1 for errors.</p>
 <h2 id="list-dependencies">List dependencies<a class="headerlink" href="#list-dependencies" title="Permanent link">&para;</a></h2>
 <p>See the modules this program depends on:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>qasmith<span class="w"> </span>deps<span class="w"> </span>bell.smith
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>qasmith<span class="w"> </span>deps<span class="w"> </span>bell.smith
 </code></pre></div>
 <h2 id="compile-to-openqasm-30">Compile to OpenQASM 3.0<a class="headerlink" href="#compile-to-openqasm-30" title="Permanent link">&para;</a></h2>
 <p>Compile the program to OpenQASM 3.0:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>qasmith<span class="w"> </span>compile<span class="w"> </span>bell.smith
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>qasmith<span class="w"> </span>compile<span class="w"> </span>bell.smith
 </code></pre></div>
 <p>This writes <code>bell.qasm</code> next to the source file. Specify a different output path with <code>-o</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>qasmith<span class="w"> </span>compile<span class="w"> </span>bell.smith<span class="w"> </span>-o<span class="w"> </span>output.qasm
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>qasmith<span class="w"> </span>compile<span class="w"> </span>bell.smith<span class="w"> </span>-o<span class="w"> </span>output.qasm
 </code></pre></div>
 <p>The generated OpenQASM looks like:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>OPENQASM 3.0;
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>include "stdgates.inc";
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>qubit[2] q;
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>bit[2] c;
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>h q[0];
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>cx q[0], q[1];
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>c[0] = measure q[0];
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>c[1] = measure q[1];
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>OPENQASM 3.0;
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>include "stdgates.inc";
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>qubit[2] q;
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>bit[2] c;
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>h q[0];
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>cx q[0], q[1];
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>c[0] = measure q[0];
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>c[1] = measure q[1];
 </code></pre></div>
 <h2 id="run-the-simulation">Run the simulation<a class="headerlink" href="#run-the-simulation" title="Permanent link">&para;</a></h2>
 <p>Run the program with the built-in statevector simulator:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>qasmith<span class="w"> </span>run<span class="w"> </span>bell.smith<span class="w"> </span>--shots<span class="w"> </span><span class="m">1000</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">17</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>qasmith<span class="w"> </span>run<span class="w"> </span>bell.smith<span class="w"> </span>--shots<span class="w"> </span><span class="m">1000</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">17</span>
 </code></pre></div>
 <p>You should see roughly equal counts for <code>00</code> and <code>11</code>, confirming the Bell state:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>00: 498
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>11: 502
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>00: 498
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>11: 502
 </code></pre></div>
+<h2 id="using-the-core-library">Using the Core Library<a class="headerlink" href="#using-the-core-library" title="Permanent link">&para;</a></h2>
+<p>Qasmith includes a built-in core library with common quantum operations. Let's rewrite our Bell state example using the core library:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>import { bell } from "core/gates";
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>fn main() -&gt; MeasuredResult {
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    let a = qubit();
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    let b = qubit();
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    bell(a, b);
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    return measure(a, b);
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>}
+</code></pre></div>
+<p>The core library provides reusable quantum operations without requiring manual setup. See the <a href="../../core-library/">Core Library Reference</a> for all available modules.</p>
 <h2 id="run-a-classical-program">Run a classical program<a class="headerlink" href="#run-a-classical-program" title="Permanent link">&para;</a></h2>
 <p>Qasmith can also run classical programs that compute with integers and floats. Save this as <code>classical.smith</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nx">fn</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nx">Int</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">5</span><span class="p">;</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>fn main() -&gt; Int {
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    let x = 3 + 5;
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    return x;
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>}
 </code></pre></div>
 <p>Run it with:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>qasmith<span class="w"> </span><span class="nb">eval</span><span class="w"> </span>classical.smith
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>qasmith<span class="w"> </span><span class="nb">eval</span><span class="w"> </span>classical.smith
 </code></pre></div>
 <p>Output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>8
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>8
 </code></pre></div>
 <h2 id="whats-next">What's next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
 <ul>
+<li><a href="../quickstart/">Quick Start</a> — comprehensive getting started guide</li>
+<li><a href="../../core-library/">Core Library</a> — explore built-in quantum operations</li>
 <li><a href="../cli-overview/">CLI Overview</a> — explore all the Qasmith commands</li>
 <li><a href="../../language/">Language Reference</a> — learn the full language syntax</li>
 <li><a href="../../modules/">Modules</a> — organize code across multiple files</li>

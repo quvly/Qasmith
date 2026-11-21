@@ -15,6 +15,10 @@
         <link rel="canonical" href="https://quvly.github.io/Qasmith/module-resolution/">
       
       
+        <link rel="prev" href="../modules/">
+      
+      
+        <link rel="next" href="../core-library/">
       
       
         
@@ -25,7 +29,7 @@
     
     
       
-        <title>Qasmith Module Resolution and Package Management - Qasmith Documentation</title>
+        <title>Module Resolution - Qasmith Documentation</title>
       
     
     
@@ -110,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Qasmith Module Resolution and Package Management
+              Module Resolution
             
           </span>
         </div>
@@ -260,10 +264,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../language/" class="md-tabs__link">
           
   
@@ -604,28 +610,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -643,7 +652,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -733,6 +742,748 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Resolution
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Resolution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Structure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-new-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a New Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entry-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entry Point
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module Resolution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Resolution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolution-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolution Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolution-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolution Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Constraints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caching
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import Syntax
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Import Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#relative-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Relative Imports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#package-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package Imports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-library-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard Library Imports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-specifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import Specifiers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-manifest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Manifest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Manifest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toml-format-preferred" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TOML Format (Preferred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-format-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Format (Alternative)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manifest-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manifest Fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manifest Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-declaration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Declaration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Package Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Package Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-capabilities-phase-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Capabilities (Phase 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-capabilities-planned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Capabilities (Planned)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Capabilities (Planned)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-enhanced-project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Enhanced Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-package-registry-foundation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Package Registry Foundation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-4-package-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: Package Registry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-5-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 5: Advanced Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standard Library
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Standard Library">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Modules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-standard-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Standard Library
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Organization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import Guidelines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#from-json-to-toml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From JSON to TOML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-flat-structure-to-organized-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Flat Structure to Organized Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#undeclared-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "undeclared package"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#path-escapes-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "path escapes root"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circular-module-dependency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "circular module dependency"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expected-a-regular-smith-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "expected a regular .smith file"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging Imports
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-simple-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 1: Simple Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-project-with-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 2: Project with Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-project-with-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example 3: Project with Dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3409,9 +4160,9 @@
 </code></pre></div></p>
 <h2 id="further-reading">Further Reading<a class="headerlink" href="#further-reading" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="./language-guide.md">Qasmith Language Guide</a></li>
-<li><a href="./stdlib-reference.md">Standard Library Reference</a></li>
-<li><a href="./optimization/README.md">Optimization Examples</a></li>
+<li><a href="../language/">Qasmith Language Guide</a></li>
+<li><a href="../core-library/">Core Library Reference</a></li>
+<li><a href="../optimization/">Optimization Examples</a></li>
 <li><a href="../CONTRIBUTING.md">Contributing to Qasmith</a></li>
 </ul>
 
