@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { prepare } from \"./quantum/preparation.smith\";\nimport { applyLayer } from \"./quantum/layers.smith\";\n\nfn main() -> MeasuredResult {\n    let q = qreg(4);\n    let angles = [0.1, 0.2, 0.3, 0.4];\n\n    prepare(q);\n    applyLayer(q, angles);\n\n    return measure(q);\n}\n")

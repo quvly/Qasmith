@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { fromMatrix, addExactlyOne } from \"std/optimization/qubo\";\nimport { qaoa } from \"std/optimization/qaoa\";\n\nfn main() -> MeasuredResult {\n    let matrix = [\n        [-2.0, 4.0, 0.0],\n        [0.0, 3.0, -1.0],\n        [0.0, 0.0, -0.5]\n    ];\n\n    let model = fromMatrix(matrix, 1.0);\n    let constrained = addExactlyOne(model, [0, 1, 2], 10.0);\n\n    return qaoa(constrained, [0.4], [0.3]);\n}\n")

@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { fourCityProblem } from \"./libraries/travel.smith\";\nimport { qaoa } from \"std/optimization/qaoa\";\n\nfn main() -> MeasuredResult {\n    let problem = fourCityProblem();\n    return qaoa(problem, [0.4], [0.3]);\n}\n")

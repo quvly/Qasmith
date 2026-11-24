@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { tsp } from \"std/optimization/tsp\";\nimport { qaoa } from \"std/optimization/qaoa\";\n\nfn main() -> MeasuredResult {\n    let distances = [\n        [0, 10, 15, 20],\n        [10, 0, 35, 25],\n        [15, 35, 0, 30],\n        [20, 25, 30, 0]\n    ];\n\n    let problem = tsp(distances, 0);\n\n    return qaoa(problem, [0.4], [0.3]);\n}\n")

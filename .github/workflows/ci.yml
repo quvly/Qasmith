@@ -6,6 +6,9 @@ on:
   pull_request:
   workflow_call:
   workflow_dispatch:
+  schedule:
+    # Weekly govulncheck scan on Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
 
 permissions:
   contents: read
@@ -21,8 +24,8 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
         with:
           go-version-file: go.mod
           cache: false
@@ -51,3 +54,132 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: ./scripts/tests/install.ps1
+      - name: Verify version consistency
+        run: |
+          sh scripts/sync-version.sh
+          if ! cmp -s VERSION internal/version/version.txt; then
+            echo "VERSION and internal/version/version.txt differ. Run: sh scripts/sync-version.sh" >&2
+            exit 1
+          fi
+          cli_version="$(go run ./cmd/qasmith version)"
+          expected="Qasmith v$(cat VERSION)"
+          if [ "$cli_version" != "$expected" ]; then
+            echo "CLI version '$cli_version' does not match VERSION file '$expected'" >&2
+            exit 1
+          fi
+
+  race:
+    name: Go test with race detector
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Run tests with race detector
+        run: go test -race ./...
+
+  coverage:
+    name: Go test coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Run tests with coverage
+        run: go test -coverprofile=coverage.out -covermode=atomic ./...
+      - name: Generate coverage report
+        run: |
+          go tool cover -func=coverage.out > coverage.txt
+          go tool cover -html=coverage.out -o coverage.html
+          echo "## Coverage summary" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          tail -1 coverage.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage
+          path: |
+            coverage.out
+            coverage.txt
+            coverage.html
+
+  govulncheck:
+    name: Vulnerability scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+      - name: Run govulncheck
+        run: govulncheck ./...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+      - name: Run staticcheck
+        run: staticcheck ./...
+
+  fuzz:
+    name: Fuzz tests (short)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Fuzz lexer
+        run: go test -fuzz=FuzzLex -fuzztime=30s ./internal/syntax
+      - name: Fuzz parser
+        run: go test -fuzz=FuzzParse -fuzztime=30s ./internal/syntax
+
+  openqasm-validation:
+    name: Validate generated OpenQASM
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: actions/setup-python@a1f959d36e4d41db8f689a4a7b5e0938b4e6a36d # v5.6.0
+        with:
+          python-version: '3.12'
+      - name: Install OpenQASM 3 reference parser
+        run: pip install 'openqasm3[parser]==1.0.1'
+      - name: Build CLI
+        run: go build -o qasmith ./cmd/qasmith
+      - name: Compile examples and validate OpenQASM
+        run: |
+          set -eu
+          failed=0
+          for smith in examples/program.smith examples/classical.smith examples/rotations.smith \
+              examples/circuit_builder.smith examples/register.smith examples/register_layer.smith \
+              examples/superposition.smith bell.smith program.smith tsp.smith program-imported.smith; do
+            if [ ! -f "$smith" ]; then continue; fi
+            output=$(mktemp --suffix=.qasm)
+            if ./qasmith compile "$smith" -o "$output" 2>/dev/null; then
+              if ! python3 -c "import openqasm3; openqasm3.parse(open('$output').read())" 2>/dev/null; then
+                echo "FAIL: $smith generated invalid OpenQASM" >&2
+                failed=1
+              fi
+            fi
+            rm -f "$output"
+          done
+          exit $failed

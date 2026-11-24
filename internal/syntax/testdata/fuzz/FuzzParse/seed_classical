@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { add as sum } from \"./modules/math.smith\";\n\nfn main() -> Int {\n    return sum(3, 5);\n}\n")

@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { prepareBell } from \"entangle/bell\";\n\nfn main() -> MeasuredResult {\n    let a = qubit();\n    let b = qubit();\n\n    prepareBell(a, b);\n\n    return measure(a, b);\n}\n")

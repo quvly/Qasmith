@@ -1,0 +1,2 @@
+go test fuzz v1
+string("import { rzz } from \"./modules/rotations.smith\";\n\nfn main() -> MeasuredResult {\n    let a = qubit();\n    let b = qubit();\n\n    rx(pi, a);\n    ry(pi, b);\n    rzz(pi / 2.0, a, b);\n\n    return measure(a, b);\n}\n")
