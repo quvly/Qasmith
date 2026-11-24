@@ -6,12 +6,6 @@ updates:
     schedule:
       interval: "weekly"
 
-  # npm dependencies for VS Code extension
-  - package-ecosystem: "npm"
-    directory: "/editors/vscode"
-    schedule:
-      interval: "weekly"
-
   # Python dependencies for documentation
   - package-ecosystem: "pip"
     directory: "/"
