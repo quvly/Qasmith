@@ -1,0 +1,2 @@
+go test fuzz v1
+string("fn main() -> MeasuredResult {\n    let q = qubit();\n    h(q);\n    return measure(q);\n}\n")
