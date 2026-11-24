@@ -27,4 +27,9 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+# Build artifacts
 dist/
+qasmith
+qasmith.exe
+/*.qasm
