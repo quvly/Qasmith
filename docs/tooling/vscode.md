@@ -1,6 +1,8 @@
 # Developing Qasmith Programs in Visual Studio Code
 
-Install VS Code 1.90 or newer and Qasmith CLI 0.9.0 or later. Install the Qasmith extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Quvly.qasmith-language) or search for "Qasmith" in the VS Code Extensions view.
+Install VS Code 1.90 or newer and Qasmith CLI 0.10.1 or later. Install the Qasmith extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Quvly.qasmith-language) or search for "Qasmith" in the VS Code Extensions view.
+
+**Extension source:** The VS Code extension is maintained in a [separate repository](https://github.com/quvly/qasmith-visualstudiocode-extension). Extension issues, pull requests, and source code live there. This repository does not run VS Code checks in CI; the extension has its own CI pipeline.
 
 Set the Qasmith executable path in User Settings (`qasmith.executablePath`) or ensure `qasmith` is on your PATH. Open a project directory and grant Workspace Trust to enable compiler processes. Highlighting, bracket matching, comment toggling, indentation, folding and snippets are available in Restricted Mode.
 
