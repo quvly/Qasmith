@@ -1,0 +1,9 @@
+# CODEOWNERS: per-file owners for automatic review assignment.
+# Update the usernames below once the project owner confirms the maintainers.
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# TODO (owner): Replace the placeholder below with the confirmed maintainer
+# GitHub usernames, for example:
+#   * @alice @bob
+#   /docs/ @alice
+#   *.go @bob
