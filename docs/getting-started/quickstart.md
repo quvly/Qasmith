@@ -25,7 +25,7 @@ Add the `qasmith` binary to your PATH.
 qasmith version
 ```
 
-Expected output: `Qasmith v0.10.0`
+Expected output: `Qasmith v0.10.1`
 
 ## Your First Quantum Program
 

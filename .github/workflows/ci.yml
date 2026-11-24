@@ -51,3 +51,16 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: ./scripts/tests/install.ps1
+      - name: Verify version consistency
+        run: |
+          sh scripts/sync-version.sh
+          if ! cmp -s VERSION internal/version/version.txt; then
+            echo "VERSION and internal/version/version.txt differ. Run: sh scripts/sync-version.sh" >&2
+            exit 1
+          fi
+          cli_version="$(go run ./cmd/qasmith version)"
+          expected="Qasmith v$(cat VERSION)"
+          if [ "$cli_version" != "$expected" ]; then
+            echo "CLI version '$cli_version' does not match VERSION file '$expected'" >&2
+            exit 1
+          fi

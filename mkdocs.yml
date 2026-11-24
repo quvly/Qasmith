@@ -35,7 +35,7 @@ theme:
     repo: fontawesome/brands/github
 
 exclude_docs: |
-  phase-*-compliance.md
+  internal/
   developer-tooling.md
 
 plugins:

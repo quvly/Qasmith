@@ -89,6 +89,10 @@ Visit `http://localhost:8000` to preview changes.
 - Add documentation comments for public APIs
 - Keep functions small and focused
 
+## Phase compliance reports
+
+Internal development phase compliance reports are in [`docs/internal/`](internal/). These are historical self-assessments from each development phase. For each claim in them, the linked test or evidence file proves it.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the Apache-2.0 License.

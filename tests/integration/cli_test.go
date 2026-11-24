@@ -299,8 +299,13 @@ fn main() -> MeasuredResult {
 		if got := call(root, 0, "deps", "bell.smith"); got != "bell.smith\n└── packages/entangle/bell.smith\n" {
 			t.Fatalf("deps output %q", got)
 		}
-		if got := call(root, 0, "version"); got != "Qasmith v0.10.0\n" {
-			t.Fatalf("version output %q", got)
+		versionBytes, err := os.ReadFile(filepath.Join(root, "VERSION"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		expectedVersion := "Qasmith v" + strings.TrimSpace(string(versionBytes)) + "\n"
+		if got := call(root, 0, "version"); got != expectedVersion {
+			t.Fatalf("version output %q, want %q", got, expectedVersion)
 		}
 	})
 	t.Run("diagnostics and exit status", func(t *testing.T) {

@@ -1,6 +1,8 @@
 # Installation
 
-Qasmith is available for macOS, Linux, and Windows. Both installers verify the executable's SHA-256 checksum. Releases support x86-64 and ARM64 on all three platforms.
+Qasmith is available for macOS, Linux, and Windows. Both installers verify the executable's SHA-256 checksum.
+
+Releases support **x86-64 and ARM64 on macOS and Linux**. Windows uses a PowerShell installer with x86-64 and ARM64 support.
 
 ## Download the installer
 
@@ -17,7 +19,7 @@ qasmith version
 
 The installer defaults to `~/.local/bin`. Add the `export` line to your shell configuration (`~/.bashrc`, `~/.zshrc`, etc.) to keep the binary on your PATH across sessions.
 
-Use `--version v0.9.1` to pin a release or `--bin-dir DIRECTORY` to choose a destination.
+Use `--version v0.10.1` to pin a release or `--bin-dir DIRECTORY` to choose a destination.
 
 ### Windows PowerShell
 
@@ -27,7 +29,7 @@ Invoke-WebRequest https://github.com/quvly/Qasmith/releases/latest/download/inst
 qasmith version
 ```
 
-The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. Use `-Version v0.9.1`, `-BinDir DIRECTORY`, or `-NoPath` to override the defaults.
+The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. Use `-Version v0.10.1`, `-BinDir DIRECTORY`, or `-NoPath` to override the defaults.
 
 ## Build from source
 
@@ -50,7 +52,7 @@ After installing, verify the CLI works:
 qasmith version
 ```
 
-You should see output showing the installed version, such as `qasmith v0.9.1`.
+You should see output showing the installed version, such as `Qasmith v0.10.1`.
 
 ## Editor support
 
