@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/quvly/Qasmith/internal/lsp"
+	"github.com/quvly/Qasmith/internal/version"
 	"github.com/quvly/Qasmith/pkg/optimization/qaoa"
 	"github.com/quvly/Qasmith/pkg/qasmith"
 )
@@ -53,7 +54,7 @@ func RunContext(ctx context.Context, args []string, out, stderr io.Writer) int {
 		return runQAOA(ctx, args, out, stderr)
 	}
 	if command == "version" && len(args) == 0 {
-		fmt.Fprintln(out, "Qasmith v0.10.0")
+		fmt.Fprintln(out, version.String())
 		return 0
 	}
 	if command == "help" || command == "--help" || command == "-h" {

@@ -18,7 +18,7 @@ npm ci
 npm run compile
 npm run lint
 npm test
-npx vsce package --out qasmith-language-0.9.0.vsix
+npx vsce package --out qasmith-language-0.10.1.vsix
 ```
 
 Run real extension-host tests from the repository root. The runner uses an isolated profile and temporary workspace. Set `VSCODE_EXECUTABLE` to the desktop VS Code executable if using an existing installation. Without that variable the test tooling obtains VS Code.

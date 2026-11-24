@@ -232,6 +232,6 @@ cat distances.smith
 
 ## Next Steps
 
-- Learn about [QAOA optimization](../optimization/qaoa.md)
-- Explore [TSP encoding details](../optimization/tsp.md)
-- Try [custom QUBO models](../optimization/custom-models.md)
+- Learn about [QAOA optimization](../../docs/optimization/qaoa.md)
+- Explore [TSP encoding details](../../docs/optimization/tsp.md)
+- Try [custom QUBO models](../../docs/optimization/custom-models.md)

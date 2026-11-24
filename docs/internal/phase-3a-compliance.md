@@ -1,0 +1,25 @@
+# Phase 3A compliance report
+
+Qasmith v0.6.0 takes a validated TSP distance matrix through fixed-start QUBO encoding, generic QAOA synthesis and simulation, and strict route decoding. The four-city reference has nine binary variables. Independent tour enumeration and exhaustive QUBO minimization both find a minimum of 80.
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Standalone TSP model and versioned input | PASS | The Go package validates complete directed and symmetric matrices, finite nonnegative edges, the zero diagonal, and the fixed start. Tests cover malformed inputs and defensive copies. [Problem model](../../pkg/optimization/tsp/model.go), [validation tests](../../pkg/optimization/tsp/tsp_test.go) |
+| Fixed-start encoding, distances, and constraint penalties | PASS | Position-major mapping excludes the start. The objective preserves directed edges and includes return to start. Both one-hot constraint families use the generic penalty helper. Tests verify default and custom penalties, including overflow and a custom penalty that permits an infeasible optimum. [Encoder](../../pkg/optimization/tsp/encoding.go), [tests](../../pkg/optimization/tsp/tsp_test.go) |
+| Strict decoder and independent distance evaluation | PASS | Valid bitstrings yield closed tours. Wrong lengths, multiple or missing occupancies, and duplicate or absent cities are rejected. The route evaluator sums original matrix edges without using QUBO energies. [Decoder](../../pkg/optimization/tsp/route.go), [tests](../../pkg/optimization/tsp/tsp_test.go) |
+| Exhaustive math and classical references | PASS | Tests enumerate all 512 assignments on both the reference and a directed fixture. They independently compute travel and both constraint penalties and compare QUBO and Ising energies. Exactly six reference assignments are feasible, two tours attain 80, and every invalid assignment has a higher energy. [Permutation solver](../../pkg/optimization/tsp/reference.go), [complete landscape tests](../../pkg/optimization/tsp/tsp_test.go) |
+| QAOA compilation, execution, and optimization | PASS | Generic synthesis produces nine ordered qubits and nine terminal measurements. Exact and seeded sampled evaluation agree with their independent checks. Hybrid search delegates to the generic optimizer. A six-city circuit exports with 25 qubits and reports the simulator cap on execution. [Application](../../pkg/optimization/tsp/application.go), [pipeline tests](../../pkg/optimization/tsp/qaoa_test.go) |
+| Measurement and route metrics | PASS | Outcome counts retain raw measurements and distinguish feasible routes from constraint violations. Tests cover zero feasible samples, a best observed QUBO assignment that is infeasible, and optimal sample counts across tied classical tours. [Reporting](../../pkg/optimization/tsp/application.go), [tests](../../pkg/optimization/tsp/tsp_test.go) |
+| CLI, interoperability, and independent OpenQASM validation | PASS | All six TSP commands are exercised. The exported QUBO compiles through generic QAOA to byte-identical OpenQASM. The independent parser accepted the reference circuit and the example's optimized circuit. [CLI](../../internal/cli/tsp.go), [CLI tests](../../tests/integration/cli_test.go), [parser checks](../../tests/integration/openqasm_test.go) |
+| Prior phases and future Smith integration | PASS | Phase 1 through Phase 2D regression tests pass, and the existing Smith circuit builder still produces byte-identical golden output. The proposal covers immutable typed optimization models, bounded IR emission, and separation of runtime optimization. [Regression tests](../../tests/integration), [Phase 3B proposal](../optimization/tsp-language.md) |
+| Reference example, documentation, and results | PASS | The Go example generates the QUBO and both circuits from the supplied matrix. The guide explains each command, bit order, limits, and interpretation. [Example](../../examples/optimization/tsp/README.md), [recorded output](../../examples/optimization/tsp/reference-output.txt), [TSP guide](../optimization/tsp.md) |
+
+## Verification
+
+`gofmt -w .`, `go test ./...`, `go vet ./...`, and `go build ./cmd/qasmith` completed successfully. The test run enabled the existing independent OpenQASM reference parser. Separate checks parsed both example OpenQASM files.
+
+The reference's uniform feasibility rate is 6/512 or 1.171875%. In the depth-one example with seed 42 and 1,000 shots, the initial run had 34 feasible and 15 optimal samples. The bounded optimization used 200 evaluations with three additional starting points. Its final measurement gave 110 feasible and 46 optimal samples. These counts are empirical for the stated configuration.
+
+## Limits
+
+The default encoder cap is 4,096 variables. The generic circuit builder and simulator impose independent limits, and the local simulator supports 16 qubits. The independent permutation solver defaults to nine cities and allows explicitly configured searches up to eleven. The standard X mixer permits infeasible states. Exact objective values and heuristic sampled candidates remain separate from verified classical distances.

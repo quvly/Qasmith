@@ -1,6 +1,6 @@
 # Generic QAOA
 
-Qasmith v0.5.0 builds QAOA circuits from arbitrary supported Ising models or versioned QUBO models. Prepare a Go problem with `qaoa.New(isingModel)` or `qaoa.FromQUBO(quboModel)`. QUBO conversion happens once and retains the original model for classical comparison.
+Qasmith v0.10.1 builds QAOA circuits from arbitrary supported Ising models or versioned QUBO models. Prepare a Go problem with `qaoa.New(isingModel)` or `qaoa.FromQUBO(quboModel)`. QUBO conversion happens once and retains the original model for classical comparison.
 
 The CLI reads the existing `qasmith.qubo.v1` JSON format. These commands use the [three-variable example](../../examples/optimization/qaoa/problem.json).
 
