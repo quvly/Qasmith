@@ -1,7 +1,7 @@
 // Package version provides the Qasmith CLI version.
 //
 // The version is embedded from the VERSION file at the repository root via
-// go:embed. GoReleaser overrides it at build time through -ldflags so the
+// the go:embed directive. GoReleaser overrides it at build time through -ldflags so the
 // released binary reports the git tag.
 package version
 
