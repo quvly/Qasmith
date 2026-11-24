@@ -4,30 +4,28 @@ Qasmith is a high-level quantum programming language for developers who want fam
 
 ## Install
 
-Download the installer for your platform from the [latest GitHub release](https://github.com/quvly/Qasmith/releases/latest). Both installers verify the executable's SHA-256 checksum.
-
-Releases support **x86-64 and ARM64 on macOS and Linux**. Windows uses a PowerShell installer with x86-64 and ARM64 support.
+Download the installer for your platform from the [latest GitHub release](https://github.com/quvly/Qasmith/releases/latest). Both installers verify the executable's SHA-256 checksum. Releases support x86-64 and ARM64 on macOS and Linux; Windows uses a PowerShell installer with x86-64 and ARM64 support.
 
 **macOS and Linux**
 
 ```sh
 curl -fLO https://github.com/quvly/Qasmith/releases/latest/download/install.sh
-sh install.sh
+sh install.sh --version v0.10.1
 export PATH="$HOME/.local/bin:$PATH"
 qasmith version
 ```
 
-The installer defaults to `~/.local/bin`. Add the export to your shell configuration to keep it across sessions. Use `--version v0.10.1` to pin a release or `--bin-dir DIRECTORY` to choose a destination.
+The installer defaults to `~/.local/bin`. Add the export to your shell configuration to keep it across sessions. The `--version` flag is required: pass `--version latest` for the most recent release, or `--version v0.10.1` to pin a specific release. Use `--bin-dir DIRECTORY` to choose a destination.
 
 **Windows PowerShell**
 
 ```powershell
 Invoke-WebRequest https://github.com/quvly/Qasmith/releases/latest/download/install.ps1 -OutFile install.ps1
-.\install.ps1
+.\install.ps1 -Version v0.10.1
 qasmith version
 ```
 
-The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. Use `-Version v0.10.1`, `-BinDir DIRECTORY`, or `-NoPath` to override the defaults.
+The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. The `-Version` parameter is required: pass `-Version latest` for the most recent release, or `-Version v0.10.1` to pin a specific release. Use `-BinDir DIRECTORY` or `-NoPath` to override the defaults.
 
 ### Build from source
 

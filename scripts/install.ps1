@@ -1,10 +1,15 @@
 [CmdletBinding()]
 param(
     [ValidatePattern('^(latest|v[0-9]+\.[0-9]+\.[0-9]+)$')]
-    [string]$Version = 'latest',
+    [string]$Version = '',
     [string]$BinDir = (Join-Path $env:LOCALAPPDATA 'Qasmith\bin'),
     [switch]$NoPath
 )
+
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    Write-Error 'The -Version parameter is required. Pass -Version latest or -Version vX.Y.Z.'
+    exit 2
+}
 
 $ErrorActionPreference = 'Stop'
 $architecture = switch ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()) {
@@ -24,9 +29,25 @@ try {
     $checksum = Join-Path $stage "$asset.sha256"
     Invoke-WebRequest -UseBasicParsing -Uri "$url/$asset.sha256" -OutFile $checksum
     Invoke-WebRequest -UseBasicParsing -Uri "$url/$asset" -OutFile $binary
-    $expected = (Get-Content -LiteralPath $checksum -Raw).Trim() -split '\s+'
-    $actual = (Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash
-    if ($expected.Count -gt 2 -or ($expected.Count -eq 2 -and $expected[1] -cne $asset) -or $expected[0] -ne $actual) {
+    $checksumContent = (Get-Content -LiteralPath $checksum -Raw).Trim()
+    $lines = $checksumContent -split '\r?\n'
+    $expected = $null
+    foreach ($line in $lines) {
+        $parts = $line -split '\s+'
+        if ($parts.Count -eq 1) {
+            $expected = $parts[0]
+            break
+        }
+        if ($parts.Count -eq 2 -and $parts[1] -ceq $asset) {
+            $expected = $parts[0]
+            break
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($expected)) {
+        throw 'Could not read expected SHA-256 from checksum file.'
+    }
+    $actual = (Get-FileHash -LiteralPath $binary -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($expected -cne $actual) {
         throw 'Qasmith download failed SHA-256 verification.'
     }
     & $binary version

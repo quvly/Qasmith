@@ -26,6 +26,7 @@ while [ "$#" -gt 0 ]; do
     case "$1" in
         --output) output=$2; shift ;;
         "https://github.com/quvly/Qasmith/releases/download/$QASMITH_TEST_TAG/"*) asset=${1##*/} ;;
+        "https://github.com/quvly/Qasmith/releases/latest/download/"*) asset=${1##*/} ;;
     esac
     shift
 done
@@ -35,9 +36,31 @@ chmod +x "$fixture/curl"
 export QASMITH_FIXTURE="$fixture"
 export PATH="$fixture:$PATH"
 destination="$fixture/bin with spaces"
+
+# Test 1: missing --version should fail with exit 2
+if sh "$root/scripts/install.sh" --bin-dir "$destination" 2>/dev/null; then
+    echo 'Installer accepted missing --version flag' >&2
+    exit 1
+fi
+
+# Test 2: valid installation with pinned version
 sh "$root/scripts/install.sh" --version "$QASMITH_TEST_TAG" --bin-dir "$destination"
 test "$("$destination/qasmith" version)" = "$version"
+
+# Test 3: reinstall works
 sh "$root/scripts/install.sh" --version "$QASMITH_TEST_TAG" --bin-dir "$destination"
+
+# Test 4: --version latest works
+sh "$root/scripts/install.sh" --version latest --bin-dir "$destination"
+test "$("$destination/qasmith" version)" = "$version"
+
+# Test 5: invalid version format should fail with exit 2
+if sh "$root/scripts/install.sh" --version "not-a-version" --bin-dir "$destination" 2>/dev/null; then
+    echo 'Installer accepted invalid version format' >&2
+    exit 1
+fi
+
+# Test 6: corrupt download should fail
 printf '%s\n' 'bad download' > "$fixture/$asset"
 if sh "$root/scripts/install.sh" --version "$QASMITH_TEST_TAG" --bin-dir "$destination"; then
     echo 'Installer accepted a corrupt download' >&2

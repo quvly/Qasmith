@@ -4,7 +4,7 @@ $fixture = Join-Path ([IO.Path]::GetTempPath()) ("qasmith tests " + [guid]::NewG
 [IO.Directory]::CreateDirectory($fixture) | Out-Null
 function Invoke-WebRequest {
     param([switch]$UseBasicParsing, [uri]$Uri, [string]$OutFile)
-    if ($Uri.AbsoluteUri -notlike "https://github.com/quvly/Qasmith/releases/download/$tag/*") {
+    if ($Uri.AbsoluteUri -notlike "https://github.com/quvly/Qasmith/releases/*") {
         throw "Unexpected asset URL $Uri"
     }
     Copy-Item -LiteralPath (Join-Path $fixture $Uri.Segments[-1]) -Destination $OutFile
@@ -24,9 +24,27 @@ try {
     $installer = Join-Path $root 'scripts/install.ps1'
     $binDir = Join-Path $fixture 'bin with spaces'
     $installed = Join-Path $binDir 'qasmith.exe'
-    & $installer -Version $tag -BinDir $binDir -NoPath
+
+    # Test 1: missing -Version should fail
+    try {
+        & $installer -BinDir $binDir -NoPath
+        throw 'Installer accepted missing -Version parameter'
+    } catch {
+        if ($_.Exception.Message -notmatch 'required') { throw }
+    }
+
+    # Test 2: valid installation with pinned version
     & $installer -Version $tag -BinDir $binDir -NoPath
     if ((& $installed version) -ne $version) { throw 'Unexpected installed version' }
+
+    # Test 3: reinstall works
+    & $installer -Version $tag -BinDir $binDir -NoPath
+
+    # Test 4: -Version latest works
+    & $installer -Version latest -BinDir $binDir -NoPath
+    if ((& $installed version) -ne $version) { throw 'Unexpected installed version with latest' }
+
+    # Test 5: corrupt download should fail
     Set-Content -LiteralPath $assetPath -Value 'bad download'
     try {
         & $installer -Version $tag -BinDir $binDir -NoPath

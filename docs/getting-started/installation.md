@@ -12,24 +12,24 @@ Download the installer for your platform from the [latest GitHub release](https:
 
 ```bash
 curl -fLO https://github.com/quvly/Qasmith/releases/latest/download/install.sh
-sh install.sh
+sh install.sh --version v0.10.1
 export PATH="$HOME/.local/bin:$PATH"
 qasmith version
 ```
 
 The installer defaults to `~/.local/bin`. Add the `export` line to your shell configuration (`~/.bashrc`, `~/.zshrc`, etc.) to keep the binary on your PATH across sessions.
 
-Use `--version v0.10.1` to pin a release or `--bin-dir DIRECTORY` to choose a destination.
+Use `--version v0.10.1` to pin a specific release, `--version latest` for the most recent release, or `--bin-dir DIRECTORY` to choose a destination.
 
 ### Windows PowerShell
 
 ```powershell
 Invoke-WebRequest https://github.com/quvly/Qasmith/releases/latest/download/install.ps1 -OutFile install.ps1
-.\install.ps1
+.\install.ps1 -Version v0.10.1
 qasmith version
 ```
 
-The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. Use `-Version v0.10.1`, `-BinDir DIRECTORY`, or `-NoPath` to override the defaults.
+The installer defaults to `%LOCALAPPDATA%\Qasmith\bin` and adds it to your user PATH. The `-Version` parameter is required: pass `-Version latest` for the most recent release, or `-Version v0.10.1` to pin a specific release. Use `-BinDir DIRECTORY` or `-NoPath` to override the defaults.
 
 ## Build from source
 
