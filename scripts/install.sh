@@ -2,10 +2,13 @@
 set -eu
 
 usage() {
-    printf '%s\n' 'Usage: install.sh [--version vX.Y.Z] [--bin-dir DIRECTORY]'
+    printf '%s\n' 'Usage: install.sh --version <latest|vX.Y.Z> [--bin-dir DIRECTORY]'
+    printf '%s\n' ''
+    printf '%s\n' 'The --version flag is required. Pass --version latest to install the most recent release,'
+    printf '%s\n' 'or --version vX.Y.Z to pin a specific release.'
 }
 
-version=latest
+version=""
 bin_dir="${HOME}/.local/bin"
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -20,6 +23,12 @@ while [ "$#" -gt 0 ]; do
         *) usage >&2; exit 2 ;;
     esac
 done
+
+if [ -z "$version" ]; then
+    printf '%s\n' 'Error: --version is required. Pass --version latest or --version vX.Y.Z.' >&2
+    usage >&2
+    exit 2
+fi
 
 case "$(uname -s)" in
     Darwin) platform=darwin ;;
@@ -54,6 +63,10 @@ trap 'exit 1' HUP INT TERM
 curl --fail --silent --show-error --location --proto '=https' --output "$stage/$asset.sha256" "$url/$asset.sha256"
 curl --fail --silent --show-error --location --proto '=https' --output "$stage/$asset" "$url/$asset"
 expected=$(awk -v name="$asset" 'NF == 1 || (NF == 2 && $2 == name) { print $1 }' "$stage/$asset.sha256")
+if [ -z "$expected" ]; then
+    printf '%s\n' 'Could not read expected SHA-256 from checksum file.' >&2
+    exit 1
+fi
 if command -v sha256sum >/dev/null 2>&1; then
     actual=$(sha256sum "$stage/$asset" | awk '{print $1}')
 else

@@ -10,6 +10,11 @@ builds:
     flags:
       - -trimpath
       - -buildvcs=false
+    ldflags:
+      - -s -w
+      - -X github.com/quvly/Qasmith/internal/version.Version={{ .Version }}
+      - -extldflags=-static
+    mod_timestamp: '{{ .CommitTimestamp }}'
     goos: [linux, darwin, windows]
     goarch: [amd64, arm64]
 
