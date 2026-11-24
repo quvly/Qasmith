@@ -1,0 +1,7 @@
+fn main() -> MeasuredResult {
+    let qs = qreg(3);
+    h(qs[0]);
+    cx(qs[0], qs[1]);
+    cx(qs[1], qs[2]);
+    return measure(qs[0], qs[1], qs[2]);
+}
