@@ -33,7 +33,7 @@ func chiSquareCritical(alpha float64, df int) float64 {
 	// Use Abramowitz and Stegun rational approximation.
 	p := 1 - alpha
 	t := math.Sqrt(-2 * math.Log(1-p))
-	z := t - (2.515517+0.802853*t+0.010328*t*t) / (1+1.432788*t+0.189269*t*t+0.001308*t*t*t)
+	z := t - (2.515517+0.802853*t+0.010328*t*t)/(1+1.432788*t+0.189269*t*t+0.001308*t*t*t)
 	// Wilson-Hilferty: chi-square ≈ df * (1 - 2/(9*df) + z*sqrt(2/(9*df)))^3
 	r := 1 - 2.0/(9*float64(df)) + z*math.Sqrt(2.0/(9*float64(df)))
 	return float64(df) * r * r * r

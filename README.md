@@ -76,6 +76,29 @@ The repository includes this circuit in [examples/program.smith](examples/progra
 - **Architecture:** [Compiler architecture](docs/architecture.md), [extending in Go](docs/extensions.md), [limitations](docs/roadmap.md).
 - **Editor tooling:** Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Quvly.qasmith-language) or use the [language server](docs/tooling/lsp.md) with other editors.
 
+## Status and claims
+
+The following claims are backed by tests or documentation in this repository:
+
+- **Bell state simulation produces only `00` and `11` with roughly equal counts.**
+  Statevector cross-check: `tests/cross-check/cross_check_test.go:TestCorpusStatevectors/bell`.
+  Statistical test: `tests/cross-check/statistical_test.go:TestChiSquareBellState`.
+- **Classical evaluation of `examples/classical.smith` returns `8`.**
+  Integration test: `tests/integration/cli_test.go:TestCLI`.
+- **The compiler rejects programs that copy qubit references, reuse a qubit
+  after measurement, or pass the same qubit as both CX operands.**
+  Semantic tests: `pkg/qasmith/compiler_test.go` and `pkg/qasmith/rzz_test.go`.
+- **Generated OpenQASM is syntactically valid per the reference parser.**
+  CI job: `openqasm-validation` in `.github/workflows/ci.yml`.
+  Historical evidence: `docs/internal/phase-2a-compliance.md`.
+- **The simulator statevector matches analytical computation for 20 circuits
+  (Bell, GHZ, rotations, registers, controlled gates).**
+  Cross-check corpus: `tests/cross-check/corpus/` and
+  `tests/cross-check/cross_check_test.go`.
+
+Other claims in the README are documentation of intent and should not be read
+as guarantees until corresponding tests are added.
+
 ## Documentation
 
 - [Circuit construction with registers, matrices, and static control](docs/circuit-construction.md)
@@ -94,3 +117,12 @@ Qasmith is licensed under [Apache-2.0](LICENSE).
 **Quvly created Qasmith and is building an enterprise execution engine for quantum experiments.** Quvly brings AI-assisted modeling, quantum execution, classical benchmarks, and result verification into one research workspace. The goal is to make each experiment reproducible and give teams the evidence they need to evaluate its results. [Explore Quvly](https://quvly.eu)
 
 Quvly is in private research alpha, and early access is open. Qasmith is open source and available today. [Request early access at Quvly](https://quvly.eu/#early-access)
+
+## Commercial relationship
+
+Qasmith is an open-source project licensed under the Apache License 2.0. It was
+created by [Quvly](https://quvly.eu), which also maintains a separate commercial
+quantum experiment execution engine. The commercial product is not part of this
+repository and is not covered by the Apache-2.0 license. Contributions to
+Qasmith are welcome under the terms of the license; see
+[CONTRIBUTING.md](CONTRIBUTING.md).

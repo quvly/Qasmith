@@ -33,3 +33,4 @@ dist/
 qasmith
 qasmith.exe
 /*.qasm
+TSP_CSV_IMPLEMENTATION.md
