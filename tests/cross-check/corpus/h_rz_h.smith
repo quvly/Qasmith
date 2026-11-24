@@ -1,0 +1,7 @@
+fn main() -> MeasuredResult {
+    let q = qubit();
+    h(q);
+    rz(pi / 2, q);
+    h(q);
+    return measure(q);
+}

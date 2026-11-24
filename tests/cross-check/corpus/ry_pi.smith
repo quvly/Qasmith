@@ -1,0 +1,5 @@
+fn main() -> MeasuredResult {
+    let q = qubit();
+    ry(pi, q);
+    return measure(q);
+}
